@@ -6,11 +6,12 @@
 /*   By: hmnasfa <hmnasfa@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/17 12:41:07 by hmnasfa           #+#    #+#             */
-/*   Updated: 2025/10/17 12:44:55 by hmnasfa          ###   ########.fr       */
+/*   Updated: 2025/10/17 15:34:50 by hmnasfa          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "Contact.hpp"
+#include <cstdlib>
 
 #ifndef PHONEBOOK_HPP
 # define PHONEBOOK_HPP
