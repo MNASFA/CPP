@@ -3,15 +3,64 @@
 /*                                                        :::      ::::::::   */
 /*   main.cpp                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: hmnasfa <hmnasfa@student.42.fr>            +#+  +:+       +#+        */
+/*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/17 13:54:13 by hmnasfa           #+#    #+#             */
-/*   Updated: 2025/10/17 18:12:53 by hmnasfa          ###   ########.fr       */
+/*   Updated: 2025/10/17 20:56:19 by marvin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "PhoneBook.hpp"
 #include <iomanip>
+#include <csignal>
+
+void signal_handler(int signal)
+{
+    (void) signal;
+    std::cout << std::endl;
+    exit (0);
+}
+
+std::string trimWhitespace(std::string str)
+{
+    int start = 0;
+    int end = str.length();
+    
+    while (start < end && std::isspace(str[start]))
+        start++;
+    
+    while (end > start && std::isspace(str[end - 1]))
+        end--;
+    
+    return str.substr(start, end - start);
+}
+
+bool isPrintable(std::string str)
+{
+    str = trimWhitespace(str);
+    if (str.empty())
+        return false;
+        
+    for (size_t i = 0; i < str.length(); i++)
+    {
+        if (str[i] > 32 && str[i] < 127)
+            return true;
+    }
+    return false;
+}
+
+bool isValidNumber(std::string str)
+{
+	if (str.empty())
+		return false;
+	
+	for (size_t i = 0; i < str.length(); i++)
+	{
+		if (!std::isdigit(str[i]))
+			return false;
+	}
+	return true;
+}
 
 // display table
 
@@ -32,9 +81,9 @@ void displayTable(PhoneBook &pb)
 
         if (firstName.length() > 10)
             firstName = firstName.substr(0, 9) + ".";
-        else if (lastName.length() > 10)
+        if (lastName.length() > 10)
             lastName = lastName.substr(0, 9) + ".";
-        else if (nickName.length() > 10)
+        if (nickName.length() > 10)
             nickName = nickName.substr(0, 9) + ".";
 
         std::cout << "|";
@@ -43,29 +92,6 @@ void displayTable(PhoneBook &pb)
         std::cout << std::setw(10) << lastName << "|";
         std::cout << std::setw(10) << nickName << "|" << std::endl;
     }
-}
-
-int is_printable(std::string str)
-{
-    for (int i = 0; str[i] ; i++)
-    {
-        if (str[i] > 32 && str[i] < 127)
-           return 1;
-    }
-    return 0;
-}
-
-int valid_number(std::string str)
-{
-    int i = 0;
-
-    while (str[i])
-    {
-        if (str[i] < '0' || str[i] > '9')
-            return 0;
-        i++;
-    }
-    return 1;
 }
 
 void addContactPrompt(PhoneBook &pb)
@@ -79,66 +105,64 @@ void addContactPrompt(PhoneBook &pb)
     while (1)
     {
         std::cout << "Enter First Name : ";
-        if (!std::getline(std::cin, firstname) || !is_printable(firstname))
+        if (!std::getline(std::cin, firstname) || !isPrintable(firstname))
         {
             std::cout << "Error : First Name cannot be empty !" << std::endl;
             continue;
         }
-        else
-            break;
+        firstname = trimWhitespace(firstname);
+        break;
     }
     
     while (1)
     {
         std::cout << "Enter Last Name : ";
-        if (!std::getline(std::cin, lastname) || !is_printable(lastname))
+        if (!std::getline(std::cin, lastname) || !isPrintable(lastname))
         {
             std::cout << "Error : Last Name cannot be empty !" << std::endl;
             continue;
         }
-        else
-            break ;
+        lastname = trimWhitespace(lastname);
+        break ;
     }
-    
 
     while (1)
     {
         std::cout << "Enter Nickname : ";
-        if (!std::getline(std::cin, nickname) || !is_printable(nickname))
+        if (!std::getline(std::cin, nickname) || !isPrintable(nickname))
         {
             std::cout << "Error : Nickname cannot be empty !" << std::endl;
             continue;
         }
-        else
-            break ;
+        nickname = trimWhitespace(nickname);
+        break ;
     }
-    
 
     while (1)
     {
         std::cout << "Enter Phone Number : ";
-        if (!std::getline(std::cin, phonenumber) || !is_printable(phonenumber) || !valid_number(phonenumber))
+        if (!std::getline(std::cin, phonenumber) || !isValidNumber(trimWhitespace(phonenumber)))
         {
-            if (!valid_number(phonenumber))
+            if (!isValidNumber(phonenumber))
                 std::cout << "Error : Phone Number must contain only digits !" << std::endl;
             else
                 std::cout << "Error : Phone Number cannot be empty !" << std::endl;
             continue;
         }
-        else
-            break ;
+        phonenumber = trimWhitespace(phonenumber);
+        break ;
     }
     
     while (1)
     {
         std::cout << "Enter Darkest Secret : ";
-        if (!std::getline(std::cin, darkestsecret) || !is_printable(darkestsecret))
+        if (!std::getline(std::cin, darkestsecret) || !isPrintable(darkestsecret))
         {
             std::cout << "Error : Darkest Secret cannot be empty !" << std::endl;
             continue ;
         }
-        else
-            break ;
+        darkestsecret = trimWhitespace(darkestsecret);
+        break ;
     }
     
     Contact newContact;
@@ -167,7 +191,7 @@ void searchContact(PhoneBook &pb)
     if (!std::getline(std::cin, indexStr))
         return ;
         
-    if (!valid_number(indexStr))
+    if (!isValidNumber(indexStr))
     {
         std::cout << "Error : Invalid Index ! " << std::endl;
         return ;
@@ -193,6 +217,8 @@ int main()
 {
     PhoneBook pb;
     std::string command;
+    
+    std::signal(SIGINT, signal_handler);
     
     while (1)
     {
