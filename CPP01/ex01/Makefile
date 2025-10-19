@@ -1,7 +1,7 @@
-NAME = Zombie
+NAME = horde
 CC = c++
 CFLAGS = -Wall -Wextra -Werror -std=c++98
-SRC = newZombie.cpp Zombie.cpp randomChump.cpp main.cpp
+SRC = zombieHorde.cpp Zombie.cpp main.cpp
 HEADERS = Zombie.hpp
 OBJ = $(SRC:.cpp=.o)
 
