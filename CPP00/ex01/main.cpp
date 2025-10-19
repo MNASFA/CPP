@@ -3,23 +3,16 @@
 /*                                                        :::      ::::::::   */
 /*   main.cpp                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
+/*   By: hmnasfa <hmnasfa@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/17 13:54:13 by hmnasfa           #+#    #+#             */
-/*   Updated: 2025/10/17 20:56:19 by marvin           ###   ########.fr       */
+/*   Updated: 2025/10/18 16:53:45 by hmnasfa          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "PhoneBook.hpp"
 #include <iomanip>
 #include <csignal>
-
-void signal_handler(int signal)
-{
-    (void) signal;
-    std::cout << std::endl;
-    exit (0);
-}
 
 std::string trimWhitespace(std::string str)
 {
@@ -64,7 +57,7 @@ bool isValidNumber(std::string str)
 
 // display table
 
-void displayTable(PhoneBook &pb)
+void displayTable(PhoneBook *pb)
 {
     std::cout << "|";
     std::cout << std::setw(10) << "Index" << "|";
@@ -72,9 +65,9 @@ void displayTable(PhoneBook &pb)
     std::cout << std::setw(10) << "Last Name" << "|";
     std::cout << std::setw(10) << "Nickname" << "|" << std::endl;
     
-    for (int i = 0; i < pb.getContactCount(); i++)
+    for (int i = 0; i < pb->getContactCount(); i++)
     {
-        Contact c = pb.getContact(i);
+        Contact c = pb->getContact(i);
         std::string firstName = c.getFirstName();
         std::string lastName = c.getLastName();
         std::string nickName = c.getNickName();
@@ -94,7 +87,7 @@ void displayTable(PhoneBook &pb)
     }
 }
 
-void addContactPrompt(PhoneBook &pb)
+void addContactPrompt(PhoneBook *pb)
 {
     std::string firstname;
     std::string lastname;
@@ -105,7 +98,12 @@ void addContactPrompt(PhoneBook &pb)
     while (1)
     {
         std::cout << "Enter First Name : ";
-        if (!std::getline(std::cin, firstname) || !isPrintable(firstname))
+        if (!std::getline(std::cin, firstname))
+        {
+            std::cout << std::endl;
+            exit (0);
+        }
+        if (!isPrintable(firstname))
         {
             std::cout << "Error : First Name cannot be empty !" << std::endl;
             continue;
@@ -117,7 +115,12 @@ void addContactPrompt(PhoneBook &pb)
     while (1)
     {
         std::cout << "Enter Last Name : ";
-        if (!std::getline(std::cin, lastname) || !isPrintable(lastname))
+        if (!std::getline(std::cin, lastname))
+        {
+            std::cout << std::endl;
+            exit (0);
+        }
+        if (!isPrintable(lastname))
         {
             std::cout << "Error : Last Name cannot be empty !" << std::endl;
             continue;
@@ -129,7 +132,12 @@ void addContactPrompt(PhoneBook &pb)
     while (1)
     {
         std::cout << "Enter Nickname : ";
-        if (!std::getline(std::cin, nickname) || !isPrintable(nickname))
+        if (!std::getline(std::cin, nickname))
+        {
+            std::cout << std::endl;
+            exit (0);
+        }
+        if (!isPrintable(nickname))
         {
             std::cout << "Error : Nickname cannot be empty !" << std::endl;
             continue;
@@ -141,12 +149,17 @@ void addContactPrompt(PhoneBook &pb)
     while (1)
     {
         std::cout << "Enter Phone Number : ";
-        if (!std::getline(std::cin, phonenumber) || !isValidNumber(trimWhitespace(phonenumber)))
+        if (!std::getline(std::cin, phonenumber))
         {
-            if (!isValidNumber(phonenumber))
-                std::cout << "Error : Phone Number must contain only digits !" << std::endl;
-            else
+            std::cout << std::endl;
+            exit (0);
+        }
+        if (!isValidNumber(trimWhitespace(phonenumber)))
+        {
+            if (phonenumber.empty())
                 std::cout << "Error : Phone Number cannot be empty !" << std::endl;
+            else
+                std::cout << "Error : Phone Number must contain only digits !" << std::endl;
             continue;
         }
         phonenumber = trimWhitespace(phonenumber);
@@ -156,7 +169,12 @@ void addContactPrompt(PhoneBook &pb)
     while (1)
     {
         std::cout << "Enter Darkest Secret : ";
-        if (!std::getline(std::cin, darkestsecret) || !isPrintable(darkestsecret))
+        if (!std::getline(std::cin, darkestsecret))
+        {
+            std::cout << std::endl;
+            exit (0);
+        }
+        if (!isPrintable(darkestsecret))
         {
             std::cout << "Error : Darkest Secret cannot be empty !" << std::endl;
             continue ;
@@ -172,13 +190,13 @@ void addContactPrompt(PhoneBook &pb)
     newContact.setPhoneNumber(phonenumber);
     newContact.setDarkestSecret(darkestsecret);
 
-    pb.addContact(newContact);
+    pb->addContact(newContact);
     std::cout << "Contact added successfully !" << std::endl;
 }
 
-void searchContact(PhoneBook &pb)
+void searchContact(PhoneBook *pb)
 {
-    if (pb.getContactCount() == 0)
+    if (pb->getContactCount() == 0)
     {
         std::cout << "No contact to display !!" << std::endl;
         return ;
@@ -189,7 +207,10 @@ void searchContact(PhoneBook &pb)
     std::string indexStr;
     std::cout << "Enter Contact Index : ";
     if (!std::getline(std::cin, indexStr))
-        return ;
+    {
+        std::cout << std::endl;
+        exit (0);
+    }
         
     if (!isValidNumber(indexStr))
     {
@@ -199,13 +220,13 @@ void searchContact(PhoneBook &pb)
     
     int index = std::atoi(indexStr.c_str());
     
-    if (!pb.isValidIndex(index))
+    if (!pb->isValidIndex(index))
     {
         std::cout << "Error : Invalid Index !" << std::endl;
         return ;
     }
 
-    Contact c = pb.getContact(index);
+    Contact c = pb->getContact(index);
     std::cout << "First Name : " << c.getFirstName() << std::endl;
     std::cout << "Last Name : " << c.getLastName() << std::endl;
     std::cout << "Nickname : " << c.getNickName() << std::endl;
@@ -217,18 +238,19 @@ int main()
 {
     PhoneBook pb;
     std::string command;
-    
-    std::signal(SIGINT, signal_handler);
-    
+
     while (1)
     {
         std::cout << "Enter command (ADD, SEARCH OR EXIT): ";
         if (!std::getline(std::cin, command))
+        {
+            std::cout << std::endl;
             break ;
+        }
         if (command == "ADD")
-            addContactPrompt(pb);
+            addContactPrompt(&pb);
         else if (command == "SEARCH")
-            searchContact(pb);
+            searchContact(&pb);
         else if (command == "EXIT")
             break ;
     }

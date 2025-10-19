@@ -1,36 +1,37 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   PhoneBook.hpp                                      :+:      :+:    :+:   */
+/*   Zombie.hpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: hmnasfa <hmnasfa@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/10/17 12:41:07 by hmnasfa           #+#    #+#             */
-/*   Updated: 2025/10/19 08:35:37 by hmnasfa          ###   ########.fr       */
+/*   Created: 2025/10/18 21:53:35 by hmnasfa           #+#    #+#             */
+/*   Updated: 2025/10/19 08:39:17 by hmnasfa          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 
-#ifndef PHONEBOOK_HPP
-# define PHONEBOOK_HPP
+#ifndef ZOMBIE_HPP
+# define ZOMBIE_HPP
 
-#include "Contact.hpp"
-#include <cstdlib>
+#include <iostream>
+#include <string>
 
-class PhoneBook
+class Zombie
 {
-    private: 
-        Contact contacts[8];
-        int contactCount;
-        int oldestIndex;
+    private:
+        std::string name;
+    
     public:
-        PhoneBook();
-        ~PhoneBook();
+        Zombie();
+        Zombie(std::string name);
+        ~Zombie();
         
-        void addContact(Contact c);
-        Contact getContact(int index);
-        int getContactCount();
-        bool isValidIndex(int index);
+        void announce(void);
+        void setName(std::string name);
 };
+
+Zombie  *newZombie(std::string name);
+void    randomChump(std::string name);
 
 #endif
