@@ -1,25 +1,28 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   HumanA.cpp                                         :+:      :+:    :+:   */
+/*   Replace.hpp                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: hmnasfa <hmnasfa@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/10/20 12:15:11 by hmnasfa           #+#    #+#             */
-/*   Updated: 2025/10/20 13:19:55 by hmnasfa          ###   ########.fr       */
+/*   Created: 2025/10/20 14:48:17 by hmnasfa           #+#    #+#             */
+/*   Updated: 2025/10/20 14:57:47 by hmnasfa          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "HumanA.hpp"
+#ifndef REPLACE_HPP
+# define REPLACE_HPP
 
-HumanA::HumanA(std::string name, Weapon &weapon) : weapon(weapon)
+#include <iostream>
+#include <fstream>
+
+class Replace
 {
-    this->name = name;
-}
+    private:
+        
+    public:
+        Replace();
+        ~Replace();
+};
 
-HumanA::~HumanA(){}
-
-void HumanA::attacks()
-{
-    std::cout << this->name << " attacks with their " << this->weapon.getType() << std::endl;
-}
+#endif

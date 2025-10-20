@@ -1,8 +1,8 @@
-NAME = attacks
-CC = c++
+NAME = Sed_is_for_losers
+CC = cc 
 CFLAGS = -Wall -Wextra -Werror -std=c++98
-SRC = main.cpp HumanA.cpp HumanB.cpp Weapon.cpp
-HEADERS = Weapon.hpp HumanA.hpp HumanB.hpp
+SRC = main.cpp
+HEADERS = 
 OBJ = $(SRC:.cpp=.o)
 
 all: $(NAME)
