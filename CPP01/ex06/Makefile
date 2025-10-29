@@ -1,7 +1,8 @@
-NAME = Sed_is_for_losers
+NAME = harlFilter
 CC = c++
 CFLAGS = -Wall -Wextra -Werror -std=c++98
-SRC = main.cpp
+SRC = main.cpp Harl.cpp
+HEADERS = Harl.hpp
 OBJ = $(SRC:.cpp=.o)
 
 all: $(NAME)
@@ -9,7 +10,7 @@ all: $(NAME)
 $(NAME) : $(OBJ)
 	$(CC) $(CFLAGS) -o $(NAME) $(OBJ)
 
-%.o: %.cpp
+%.o: %.cpp ${HEADERS}
 	$(CC) $(CFLAGS) -c $< -o $@
 
 clean:
