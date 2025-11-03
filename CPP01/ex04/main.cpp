@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   main.cpp                                           :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: hmnasfa <hmnasfa@student.42.fr>            +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/11/01 11:15:28 by hmnasfa           #+#    #+#             */
+/*   Updated: 2025/11/01 11:15:36 by hmnasfa          ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include <iostream>
 #include <fstream>
 #include <string>
@@ -6,7 +18,7 @@ int main(int ac, char **av)
 {
     if (ac != 4)
     {
-        std::cerr << "Usage : ./program <s1> <s2>" << std::endl;
+        std::cerr << "Usage : ./program <filename> <s1> <s2>" << std::endl;
         return 1;
     }
 
