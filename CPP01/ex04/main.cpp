@@ -6,7 +6,7 @@ int main(int ac, char **av)
 {
     if (ac != 4)
     {
-        std::cerr << "Usage : ./program <s1> <s2>" << std::endl;
+        std::cerr << "Usage : ./program <filename> <s1> <s2>" << std::endl;
         return 1;
     }
 
