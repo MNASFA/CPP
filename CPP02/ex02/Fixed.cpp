@@ -3,16 +3,16 @@
 // Canonical form
 Fixed::Fixed(){
     fixedPointValue = 0;
-    std::cout << "Default Constructor called" << std::endl;
+    // std::cout << "Default Constructor called" << std::endl;
 }
 
 Fixed::Fixed(const Fixed &other){
-    std::cout << "Copy constructor called" << std::endl;
+    // std::cout << "Copy constructor called" << std::endl;
     *this = other;
 }
 
 Fixed &Fixed::operator=(const Fixed &other){
-    std::cout << "Copy assignment operator called" << std::endl;
+    // std::cout << "Copy assignment operator called" << std::endl;
     if (this != &other){
         this->fixedPointValue = other.getRawBits();
     }
@@ -20,7 +20,7 @@ Fixed &Fixed::operator=(const Fixed &other){
 }
 
 Fixed::~Fixed(){
-    std::cout << "Destructor is called" << std::endl;
+    // std::cout << "Destructor is called" << std::endl;    
 }
 
 // setters and gettersd
@@ -37,12 +37,12 @@ int Fixed::getRawBits(void) const{
 // Ex01:
 
 Fixed::Fixed(const int nb){
-    std::cout << "Int constructor called" << std::endl;
+    // std::cout << "Int constructor called" << std::endl;
     this->fixedPointValue = nb << this->fractionalBits;
 }
 
 Fixed::Fixed(const float f){
-    std::cout << "Float constructor called" << std::endl;
+    // std::cout << "Float constructor called" << std::endl;
     this->fixedPointValue = roundf(f * (1 << this->fractionalBits));
 }
 
@@ -103,13 +103,13 @@ Fixed Fixed::operator-(const Fixed &obj){
 
 Fixed Fixed::operator*(const Fixed &obj){
     Fixed res;
-    res.setRawBits(this->fixedPointValue * obj.fixedPointValue);
+    res.setRawBits((this->fixedPointValue * obj.fixedPointValue) >> fractionalBits);
     return res;
 }
 
 Fixed Fixed::operator/(const Fixed &obj){
     Fixed res;
-    res.setRawBits(this->fixedPointValue / obj.fixedPointValue);
+    res.setRawBits((this->fixedPointValue << fractionalBits) / obj.fixedPointValue);
     return res;
 }
 
@@ -136,4 +136,34 @@ Fixed Fixed::operator--(int){
     Fixed tmp(*this);
     this->fixedPointValue--;
     return tmp;
+}
+
+// static functions min and max
+
+Fixed const &Fixed::min(Fixed const &a, Fixed const &b){
+    if (a.fixedPointValue < b.fixedPointValue)
+        return a;
+    else
+        return b;
+}
+
+Fixed &Fixed::min(Fixed &a, Fixed &b){
+     if (a.fixedPointValue < b.fixedPointValue)
+        return a;
+    else
+        return b;
+}
+
+Fixed const &Fixed::max(Fixed const &a, Fixed const &b){
+    if (a.fixedPointValue > b.fixedPointValue)
+        return a;
+    else
+        return b;
+}
+
+Fixed &Fixed::max(Fixed &a, Fixed &b){
+     if (a.fixedPointValue > b.fixedPointValue)
+        return a;
+    else
+        return b;
 }
