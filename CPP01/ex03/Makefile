@@ -1,6 +1,6 @@
 NAME = attacks
 CC = c++
-CFLAGS = -Wall -Wextra -Werror -std=c++98
+CFLAGS = -Wall -Wextra -Werror
 SRC = main.cpp HumanA.cpp HumanB.cpp Weapon.cpp
 HEADERS = Weapon.hpp HumanA.hpp HumanB.hpp
 OBJ = $(SRC:.cpp=.o)

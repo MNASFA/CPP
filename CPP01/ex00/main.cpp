@@ -6,7 +6,7 @@
 /*   By: hmnasfa <hmnasfa@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/19 09:01:09 by hmnasfa           #+#    #+#             */
-/*   Updated: 2025/10/19 09:23:39 by hmnasfa          ###   ########.fr       */
+/*   Updated: 2025/10/31 19:29:47 by hmnasfa          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,9 +28,9 @@ int main()
     std::cout << std::endl;
 
     std::cout << "== Testing multiple newZombies ==" << std::endl;
-    Zombie *Zombie1 = new Zombie("Zombie 1");
-    Zombie *Zombie2 = new Zombie("Zombie 2");
-    Zombie *Zombie3 = new Zombie("Zombie 3");
+    Zombie *Zombie1 = newZombie("Zombie 1");
+    Zombie *Zombie2 = newZombie("Zombie 2");
+    Zombie *Zombie3 = newZombie("Zombie 3");
     Zombie1->announce();
     Zombie2->announce();
     Zombie3->announce();
