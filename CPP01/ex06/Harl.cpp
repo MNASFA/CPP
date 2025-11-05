@@ -6,7 +6,7 @@
 /*   By: hmnasfa <hmnasfa@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/01 11:20:02 by hmnasfa           #+#    #+#             */
-/*   Updated: 2025/11/01 11:20:03 by hmnasfa          ###   ########.fr       */
+/*   Updated: 2025/11/04 17:31:02 by hmnasfa          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,25 +36,39 @@ void Harl::error(void){
     std::cout << "This is a error !!" << std::endl;
 }
 
+int getLevelIndex(std::string &level)
+{
+    if (level == "DEBUG")
+        return 0;
+    if (level == "INFO")
+        return 1;
+    if (level == "WARNING")
+        return 2;
+    if (level == "ERROR")
+        return 3;
+    return (-1);
+}
+
 void Harl::complain(std::string level){
-    std::string levels[4] = {"DEBUG", "INFO", "WARNING", "ERROR"};
-
-    void (Harl::*functions[4])(void) = {
-        &Harl::debug ,
-        &Harl::info ,
-        &Harl::warning ,
-        &Harl::error
-    };
-
-    for (int i = 0; i <= 4; i++)
+    int index = getLevelIndex(level);
+    
+    switch (index)
     {
-        if (levels[i] == level)
-        {
-            (this->*functions[i])();
-            return ;
-        }
+        case 0:
+            this->debug();
+            break;
+        case 1:
+            this->info();
+            break;
+        case 2:
+            this->warning();
+            break;
+        case 3:
+            this->error();
+            break;
+        default:
+            std::cout << "Insignificant problems !!!" << std::endl;
+            break;
     }
-
-    std::cout << "Insignificant problems !!!" << std::endl;
     std::cout << std::endl;
 }

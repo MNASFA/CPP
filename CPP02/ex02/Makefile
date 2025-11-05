@@ -1,13 +1,13 @@
-NAME = canonical_form
+NAME = operator_overload
 CC = c++
-CFLAGS = -Wall -Wextra -Werror
+CFLAGS = -Wall -Werror -Wextra -std=c++98
 SRC = main.cpp Fixed.cpp
 HEADERS = Fixed.hpp
 OBJ = $(SRC:.cpp=.o)
 
-all : $(NAME)
+all: $(NAME)
 
-$(NAME) : $(OBJ)
+$(NAME): $(OBJ)
 	$(CC) $(CFLAGS) -o $(NAME) $(OBJ)
 
 %.o : %.cpp $(HEADERS)

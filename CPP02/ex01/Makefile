@@ -1,6 +1,6 @@
 NAME = fixed_point
 CC = c++
-CFLAGS = -Wall -Werror -Wextra  
+CFLAGS = -Wall -Werror -Wextra -std=c++98
 SRC = main.cpp Fixed.cpp
 HEADERS = Fixed.hpp
 OBJ = $(SRC:.cpp=.o)
@@ -8,9 +8,9 @@ OBJ = $(SRC:.cpp=.o)
 all: $(NAME)
 
 $(NAME): $(OBJ)
-	$(CC) $(CFLAGS) -o $(OBJ) $(NAME)
+	$(CC) $(CFLAGS) -o $(NAME) $(OBJ)
 
-%.o : %.cpp
+%.o : %.cpp $(HEADERS)
 	$(CC) $(CFLAGS) -c $< -o $@
 
 clean : 
