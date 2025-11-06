@@ -1,6 +1,7 @@
 #include "Fixed.hpp"
 
-// Canonical form
+// Orthodox Canonical form
+
 Fixed::Fixed(){
     fixedPointValue = 0;
     std::cout << "Default Constructor called" << std::endl;
@@ -28,29 +29,27 @@ void Fixed::setRawBits(int const raw){
 }
 
 int Fixed::getRawBits(void) const{
-    // std::cout << "getRawsBits member function called" << std::endl;
     return (this->fixedPointValue);
 }
-
 
 // New constructors
 
 Fixed::Fixed(const int nb){
     std::cout << "Int constructor called" << std::endl;
-    this->fixedPointValue = nb << this->fractionalBits;
+    this->fixedPointValue = nb * 256;
 }
 
 Fixed::Fixed(const float f){
     std::cout << "Float constructor called" << std::endl;
-    this->fixedPointValue = roundf(f * (1 << this->fractionalBits));
+    this->fixedPointValue = roundf(f * 256);
 }
 
 float Fixed::toFloat(void) const{
-    return ((float)this->getRawBits() / (float)(1 << this->fractionalBits));
+    return ((float)this->getRawBits() / 256.0);
 }
 
 int Fixed::toInt(void) const{
-    return (roundf(this->getRawBits() >> (this->fractionalBits)));
+    return (this->getRawBits() / 256);
 }
 
 std::ostream &operator<<(std::ostream &cout, Fixed const &obj){

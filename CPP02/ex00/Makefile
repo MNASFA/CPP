@@ -1,6 +1,6 @@
 NAME = canonical_form
 CC = c++
-CFLAGS = -Wall -Wextra -Werror
+CFLAGS = -Wall -Wextra -Werror -std=c++98
 SRC = main.cpp Fixed.cpp
 HEADERS = Fixed.hpp
 OBJ = $(SRC:.cpp=.o)

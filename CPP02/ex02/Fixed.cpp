@@ -1,29 +1,24 @@
 #include "Fixed.hpp"
 
-// Canonical form
+// Orthodox Canonical form EX00
+
 Fixed::Fixed(){
     fixedPointValue = 0;
-    // std::cout << "Default Constructor called" << std::endl;
 }
 
 Fixed::Fixed(const Fixed &other){
-    // std::cout << "Copy constructor called" << std::endl;
     *this = other;
 }
 
 Fixed &Fixed::operator=(const Fixed &other){
-    // std::cout << "Copy assignment operator called" << std::endl;
     if (this != &other){
         this->fixedPointValue = other.getRawBits();
     }
     return *this;
 }
 
-Fixed::~Fixed(){
-    // std::cout << "Destructor is called" << std::endl;    
-}
+Fixed::~Fixed(){}
 
-// setters and gettersd
 
 void Fixed::setRawBits(int const raw){
     this->fixedPointValue = raw;
@@ -37,21 +32,19 @@ int Fixed::getRawBits(void) const{
 // Ex01:
 
 Fixed::Fixed(const int nb){
-    // std::cout << "Int constructor called" << std::endl;
-    this->fixedPointValue = nb << this->fractionalBits;
+    this->fixedPointValue = nb * 256;
 }
 
 Fixed::Fixed(const float f){
-    // std::cout << "Float constructor called" << std::endl;
-    this->fixedPointValue = roundf(f * (1 << this->fractionalBits));
+    this->fixedPointValue = roundf(f * 256);
 }
 
 float Fixed::toFloat(void) const{
-    return ((float)this->getRawBits() / (float)(1 << this->fractionalBits));
+    return ((float)this->getRawBits() / 256.0);
 }
 
 int Fixed::toInt(void) const{
-    return (roundf(this->getRawBits() >> (this->fractionalBits)));
+    return (this->getRawBits() * 256);
 }
 
 std::ostream &operator<<(std::ostream &cout, Fixed const &obj){
@@ -103,13 +96,13 @@ Fixed Fixed::operator-(const Fixed &obj){
 
 Fixed Fixed::operator*(const Fixed &obj){
     Fixed res;
-    res.setRawBits((this->fixedPointValue * obj.fixedPointValue) >> fractionalBits);
+    res.setRawBits((this->fixedPointValue * obj.fixedPointValue) / 256);
     return res;
 }
 
 Fixed Fixed::operator/(const Fixed &obj){
     Fixed res;
-    res.setRawBits((this->fixedPointValue << fractionalBits) / obj.fixedPointValue);
+    res.setRawBits((this->fixedPointValue * 256) / obj.fixedPointValue);
     return res;
 }
 
@@ -125,7 +118,6 @@ Fixed Fixed::operator++(int){
     this->fixedPointValue++;
     return tmp;
 }
-
 
 Fixed &Fixed::operator--(){
     this->fixedPointValue--;
