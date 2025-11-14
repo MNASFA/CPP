@@ -33,24 +33,6 @@ FragTrap::~FragTrap(){
     std::cout << "FragTrap " << this->name << " destructor called" << std::endl;
 }
 
-// attack function overriding
-
-void FragTrap::attack(const std::string &target){
-    if (this->hitPoints == 0){
-        std::cout << "FragTrap " << this->name << " is dead and cannot attack" << std::endl;
-        return ;
-    }
-
-    if (this->energyPoints == 0){
-        std::cout << "FragTrap " << this->name << " has no energy to attack" << std::endl;
-        return ;
-    }
-
-    this->energyPoints--;
-    std::cout << "FragTrap " << this->name << " attacks " << target
-        << ", causing " << this->attackDamage << " points of damage!" << std::endl;
-}
-
-void FragTrap::guardGate(){
-    std::cout << "FragTrap " << this->name << " is now in Gate keeper mode." << std::endl;
+void FragTrap::highFivesGuys(){
+    std::cout << "FragTrap " << this->name << " request a positive high five !" << std::endl;
 }

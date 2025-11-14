@@ -1,29 +1,25 @@
 #include "ClapTrap.hpp"
 
 int main() {
-    ClapTrap clap1("Test 1");
-    ClapTrap clap2("Test 2");
+    std::cout << "==========================================" << std::endl;
+    std::cout << "             TESTING CLAPTRAP             " << std::endl;
+    std::cout << "==========================================" << std::endl;
+    ClapTrap clap("CLAP_1");
+    clap.attack("TARGET_1");
+    clap.takeDamage(5);
+    clap.beRepaired(3);
 
-    std::cout << std::endl;
+    std::cout << "==========================================" << std::endl;
+    std::cout << "            SCAVTRAP MORE TESTS           " << std::endl;
+    std::cout << "==========================================" << std::endl;
 
-    clap1.attack("Enemy 1");
-    clap2.attack("Enemy 2");
-
-    std::cout << std::endl;
-
-    clap1.takeDamage(4);
-    clap2.takeDamage(5);
-
-    std::cout << std::endl;
-
-    clap1.beRepaired(6);
-    clap2.beRepaired(3);
-
-    std::cout << std::endl;
-
-    clap1.takeDamage(15);
-
-    std::cout << std::endl;
-
+    ClapTrap clap2("CLAP_2");
+    for (int i = 0; i <= 10; i++)
+        clap2.attack("TARGET_3");
+    
+    std::cout << "==========================================" << std::endl;
+    std::cout << "                 DESTRUCTORS              " << std::endl;
+    std::cout << "==========================================" << std::endl;    
+    
     return 0;
 }

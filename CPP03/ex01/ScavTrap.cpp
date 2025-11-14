@@ -30,10 +30,10 @@ ScavTrap &ScavTrap::operator=(const ScavTrap &other){
 }
 
 ScavTrap::~ScavTrap(){
-    std::cout << "ScavTrap " << this->name << " destructor called" << std::endl;
+    std::cout << "ScavTrap " << this->name << " Destructor called" << std::endl;
 }
 
-// attack function overriding
+// override attack function
 
 void ScavTrap::attack(const std::string &target){
     if (this->hitPoints == 0){

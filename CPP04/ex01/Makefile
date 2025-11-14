@@ -1,8 +1,8 @@
-NAME = FragTrap
+NAME = Polymorphism
 CC = c++
 CFLAGS = -Wall -Wextra -Werror -std=c++98
-HEADERS = ClapTrap.hpp ScavTrap.hpp FragTrap.hpp
-SRCS = main.cpp ClapTrap.cpp ScavTrap.cpp FragTrap.cpp
+HEADERS = Animal.hpp  DogCat.hpp  WrongAnimal.hpp  WrongCat.hpp
+SRCS = Animal.cpp DogCat.cpp main.cpp WrongAnimal.cpp WrongCat.cpp
 OBJS = $(SRCS:.cpp=.o)
 
 all: $(NAME)
