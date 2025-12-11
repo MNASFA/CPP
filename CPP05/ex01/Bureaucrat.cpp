@@ -1,4 +1,5 @@
 #include "Bureaucrat.hpp"
+#include "Form.hpp"
 
 void Bureaucrat::validateGrade(int grade){
     if (grade < 1)
@@ -64,4 +65,16 @@ const char* Bureaucrat::GradeTooLowException::what() const throw(){
 std::ostream &operator<<(std::ostream &out, const Bureaucrat &bureaucrat){
     out << bureaucrat.getName() << ", bureaucrat grade " << bureaucrat.getGrade() << ".";
     return out;
+}
+
+void Bureaucrat::signForm(Form &form){
+    try
+    {
+        form.beSigned(*this);
+        std::cout << this->name << " signed " << form.getName() << std::endl;
+    }
+    catch(const std::exception& e)
+    {
+        std::cout << this->name << " couldn't sign " << form.getName() << " because " << e.what() << std::endl; 
+    }
 }

@@ -16,8 +16,6 @@ Form::Form(const std::string name, const int gradeToSign, const int gradeToExecu
     validateGrade(gradeToSign);
     validateGrade(gradeToExecute);
     std::cout << "Form " << _name << " constructor called" << std::endl;
-    std::cout << "Grade To Sign = " << _gradeToSign << std::endl;
-    std::cout << "Grade To Execute = " << _gradeToExecute << std::endl;
 }
 
 Form::Form(const Form &other) : _name(other._name), _isSigned(other._isSigned)
@@ -27,9 +25,11 @@ Form::Form(const Form &other) : _name(other._name), _isSigned(other._isSigned)
 }
 
 Form &Form::operator=(const Form &other){
-    std::cout << "Form copy assignment operator called" << std::endl;
-    _isSigned = other._isSigned;
-    //the others cannot be assigned cause is const !!!!!!
+    std::cout << "Form assignment operator called" << std::endl;
+    if (this != &other) {
+        _isSigned = other._isSigned;
+    }
+    return *this;
 }
 
 Form::~Form(){
@@ -75,4 +75,3 @@ std::ostream &operator<<(std::ostream &out, const Form &form){
     << "\n" << "Grade to execute : " << form.getGradeToExecute();
     return out;
 }
-
