@@ -17,8 +17,7 @@ class AForm
         void validateGrade(int grade);
 
     protected:
-        void CheckRequirement(Bureaucrat const &executor);
-        // Pure virtual function (make class abstract)
+        // Each concrete form implements its specific action
         virtual void executeAction() const = 0;
 
     public:
@@ -31,11 +30,11 @@ class AForm
         std::string getName() const;
         int getGradeToSign() const;
         int getGradeToExecute() const;
-        bool isSigned();
+        bool isSigned() const;
 
         void beSigned(const Bureaucrat &bureaucrat);
 
-        
+        // Add in ex02
         void execute(Bureaucrat const &executor) const;
 
         class GradeTooHighException : public std::exception

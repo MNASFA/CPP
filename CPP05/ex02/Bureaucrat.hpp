@@ -43,5 +43,4 @@ class Bureaucrat
 
 std::ostream &operator<<(std::ostream &out, const Bureaucrat &bureaucrat);
 
-
 #endif
