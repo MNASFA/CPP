@@ -1,12 +1,23 @@
 
 #include "AForm.hpp"
 #include "Bureaucrat.hpp"
+#include "ShrubberyCreationForm.hpp"
 
 int main(){
-    // AForm form("test", 50 , 25); // Abstarct class cannot instantiate
+    std::cout << "===== Test 1: ShrubberyCreationForm =====" << std::endl;
+    try
+    {
+        Bureaucrat houssam("Houssam", 150);
+        ShrubberyCreationForm shrub("street");
 
-    Bureaucrat houssam("Houssam", 50);
-    std::cout << houssam << std::endl;
-
+        std::cout << shrub << std::endl;
+        houssam.signForm(shrub);
+        houssam.executeForm(shrub);
+    }
+    catch(const std::exception& e)
+    {
+        std::cerr << "Exception : " << e.what() << std::endl;
+    }
+    
     return 0;
 }

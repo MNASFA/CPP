@@ -1,8 +1,13 @@
 #include "ShrubberyCreationForm.hpp"
 
+ShrubberyCreationForm::ShrubberyCreationForm() 
+    : AForm("Shrubbery Creation", 145, 137), _target("Default"){
+        std::cout << "ShrubberyCreationForm default constructor called" << std::endl;
+}
+
 ShrubberyCreationForm::ShrubberyCreationForm(const std::string &target) 
     : AForm("Shrubbery Creation", 145, 137), _target(target){
-        std::cout << "ShrubberyCreationForm constructor called for target" << std::endl;
+        std::cout << "ShrubberyCreationForm constructor called for target " << _target << std::endl;
 }
 
 ShrubberyCreationForm::ShrubberyCreationForm(const ShrubberyCreationForm &other)
@@ -35,6 +40,21 @@ void ShrubberyCreationForm::executeAction() const{
         std::cout << "Error : could not create file" << std::endl;
         return ;
     }
-    // Ascii tree
+    
+    file << "      oxoxoo    ooxooo       \n";
+    file << "    ooxoxo oo  oxoxoooo      \n";  
+    file << "   oooo xxoxoo ooo oooxo    \n"; 
+    file << "   oxo o oxoxo  xoxxoxoo    \n"; 
+    file << "    oxo xooxoooo o oooo      \n";
+    file << "       ooo\\oo\\  /o/o     \n";
+    file << "           \\  \\/ /        \n";
+    file << "            |   /           \n";
+    file << "            |  |            \n";
+    file << "            | D|            \n";
+    file << "            |  |            \n";
+    file << "            |  |            \n";
+    file << "     ______/____\\____        ";
 
+    file.close();
+    std::cout << "ASCII trees written to " << filename << std::endl;
 }
