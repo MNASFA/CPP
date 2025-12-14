@@ -28,5 +28,13 @@ std::string ShrubberyCreationForm::getTarget() const{
 
 void ShrubberyCreationForm::executeAction() const{
     std::string filename = this->_target + "_shrubbery";
-    // {...}
+    std::ofstream file(filename.c_str());
+
+    if (!file.is_open())
+    {
+        std::cout << "Error : could not create file" << std::endl;
+        return ;
+    }
+    // Ascii tree
+
 }
