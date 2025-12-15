@@ -27,13 +27,11 @@ ShrubberyCreationForm::~ShrubberyCreationForm(){
     std::cout << "ShrubberyCreationForm destructor called for target " << _target  << std::endl;
 }
 
-std::string ShrubberyCreationForm::getTarget() const{
-    return this->_target;
-}
-
 void ShrubberyCreationForm::executeAction() const{
     std::string filename = this->_target + "_shrubbery";
     std::ofstream file(filename.c_str());
+    
+    std::cout << std::endl;
 
     if (!file.is_open())
     {
@@ -41,12 +39,12 @@ void ShrubberyCreationForm::executeAction() const{
         return ;
     }
     
-    file << "      oxoxoo    ooxooo       \n";
-    file << "    ooxoxo oo  oxoxoooo      \n";  
+    file << "      oxoxoo    ooxooo      \n";
+    file << "    ooxoxo oo  oxoxoooo     \n";  
     file << "   oooo xxoxoo ooo oooxo    \n"; 
     file << "   oxo o oxoxo  xoxxoxoo    \n"; 
-    file << "    oxo xooxoooo o oooo      \n";
-    file << "       ooo\\oo\\  /o/o     \n";
+    file << "    oxo xooxoooo o oooo     \n";
+    file << "       ooo\\oo\\  /o/o      \n";
     file << "           \\  \\/ /        \n";
     file << "            |   /           \n";
     file << "            |  |            \n";
@@ -57,4 +55,5 @@ void ShrubberyCreationForm::executeAction() const{
 
     file.close();
     std::cout << "ASCII trees written to " << filename << std::endl;
+    std::cout << std::endl;
 }
