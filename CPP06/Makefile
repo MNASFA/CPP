@@ -1,8 +1,8 @@
 NAME = Aform
 CPP = c++
 CPPFLAGS = -Wall -Wextra -Werror -std=c++98
-SRCS = main.cpp Bureaucrat.cpp AForm.cpp ShrubberyCreationForm.cpp PresidentialPardonForm.cpp RobotomyRequestForm.cpp Intern.cpp
-HEDEARS = AForm.hpp Bureaucrat.hpp ShrubberyCreationForm.hpp PresidentialPardonForm.hpp RobotomyRequestForm.hpp Intern.hpp
+SRCS = main.cpp ScalarConverter.cpp
+HEDEARS = ScalarConverter.hpp
 OBJS = $(SRCS:.cpp=.o)
 
 all: $(NAME)
