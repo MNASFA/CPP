@@ -3,6 +3,7 @@
 
 #include <string>
 #include <iostream>
+#include <iomanip>
 #include <limits>
 #include <cmath>
 #include <cstdlib>
@@ -26,10 +27,10 @@ class ScalarConverter
 
         // Helper methods for conversion
         static void convertFromChar(char c);
-        static void converFromInt(int i);
-        // static void convertFromFloat(float f);
-        // static void convertFromDouble(double d);
-        // static void handlePseudoLiteral(std::string &literal);
+        static void convertFromInt(int i);
+        static void convertFromFloat(float f);
+        static void convertFromDouble(double d);
+        static void handlePseudoLiteral(const std::string &literal);
 
         // Display helper
         static void displayChar(char c, bool impossible);
