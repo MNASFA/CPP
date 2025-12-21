@@ -5,36 +5,30 @@
 /*                                                    +:+ +:+         +:+     */
 /*   By: hmnasfa <hmnasfa@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/12/21 09:37:48 by hmnasfa           #+#    #+#             */
-/*   Updated: 2025/12/21 09:37:49 by hmnasfa          ###   ########.fr       */
+/*   Created: 2025/12/21 09:37:15 by hmnasfa           #+#    #+#             */
+/*   Updated: 2025/12/21 11:30:31 by hmnasfa          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "iter.hpp"
-#include "iostream"
+#include "easyfind.hpp"
+#include <vector>
 
-void printInt(const int &n) {
-    std::cout << n << " ";
-}
-
-void increment(int &n){
-    n++;
-}
-
-int main(){
-    int array[] = {1, 2, 3, 4, 5};
-    size_t lenght = 5;
-
-    std::cout << "=== Before increment values ===" << std::endl;
-    std::cout << "Array Content : ";
-    ::iter(array, lenght, printInt);
-    std::cout << std::endl;
-
-    std::cout << "=== After increment values ===" << std::endl;
-    ::iter(array, lenght, increment);
-    std::cout << "Array Content : ";
-    ::iter(array, lenght, printInt);
-    std::cout << std::endl;
-
+int main()
+{
+    std::vector<int> numbers(5);
+    for (int i = 0; i < 5; i++){
+        numbers.at(i) = i;
+    }
+    
+    try
+    {
+        std::vector<int>::iterator it = ::easyfind(numbers, 3);
+        std::cout << "Number is : " << *it << std::endl;
+    }
+    catch(const std::exception& e)
+    {
+        std::cout << e.what() << std::endl;
+    }
     return 0;
 }
+
