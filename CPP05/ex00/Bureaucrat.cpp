@@ -34,14 +34,14 @@ Bureaucrat::~Bureaucrat(){
 }
 
 void Bureaucrat::incrementGrade(){
-    validateGrade(this->grade + 1);
-    this->grade++;
+    validateGrade(this->grade - 1);
+    this->grade--;
     std::cout << "Grade is incremented" << std::endl;
 }
 
 void Bureaucrat::decrementGrade(){
-    validateGrade(this->grade - 1);
-    this->grade--;
+    validateGrade(this->grade + 1);
+    this->grade++;
     std::cout << "Grade is decremented" << std::endl;
 }
 
