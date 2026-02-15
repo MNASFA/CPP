@@ -35,14 +35,14 @@ Bureaucrat::~Bureaucrat(){
 }
 
 void Bureaucrat::incrementGrade(){
-    validateGrade(this->grade + 1);
-    this->grade++;
+    validateGrade(this->grade - 1);
+    this->grade--;
     std::cout << "Grade is incremented" << std::endl;
 }
 
 void Bureaucrat::decrementGrade(){
-    validateGrade(this->grade - 1);
-    this->grade--;
+    validateGrade(this->grade + 1);
+    this->grade++;
     std::cout << "Grade is decremented" << std::endl;
 }
 
@@ -55,11 +55,11 @@ std::string Bureaucrat::getName() const{
 }
 
 const char* Bureaucrat::GradeTooHighException::what() const throw(){
-    return "Grade is too hight !! <Minimum is 1>" ;
+    return "Grade is too hight !! <Max Grade is 1>" ;
 }
 
 const char* Bureaucrat::GradeTooLowException::what() const throw(){
-    return "Grade is too low !! <Maximum is 150>";
+    return "Grade is too low !! <Min Grade is 150>";
 }
 
 std::ostream &operator<<(std::ostream &out, const Bureaucrat &bureaucrat){

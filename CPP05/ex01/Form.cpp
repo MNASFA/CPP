@@ -12,7 +12,7 @@ Form::Form() : _name("Default"), _isSigned(false), _gradeToSign(150), _gradeToEx
 }
 
 Form::Form(const std::string name, const int gradeToSign, const int gradeToExecute) 
-: _name(name),_isSigned(false) ,_gradeToSign(gradeToSign), _gradeToExecute(gradeToExecute){
+: _name(name), _isSigned(false) ,_gradeToSign(gradeToSign), _gradeToExecute(gradeToExecute){
     validateGrade(gradeToSign);
     validateGrade(gradeToExecute);
     std::cout << "Form " << _name << " constructor called" << std::endl;
@@ -35,8 +35,6 @@ Form &Form::operator=(const Form &other){
 Form::~Form(){
     std::cout << "Form Destructor called" << std::endl;
 }
-
-// Getters 
 
 std::string Form::getName() const{
     return this->_name;

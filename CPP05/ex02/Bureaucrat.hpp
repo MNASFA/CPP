@@ -29,7 +29,6 @@ class Bureaucrat
         void signForm(AForm &form);
         void executeForm(AForm const &form) const;
 
-        // Exception classes
         class GradeTooHighException : public std::exception{
             public : 
                 virtual const char *what() const throw();
