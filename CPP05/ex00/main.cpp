@@ -4,7 +4,7 @@ int main(){
     std::cout << "====== Test 1: Valid Bureaucrat Creation =======" << std::endl;
     try
     {
-        Bureaucrat Test_1("Test 1", 50);
+        Bureaucrat Test_1("Test 1", 0);
         std::cout << Test_1 << std::endl;
     }
     catch(const std::exception &e)
