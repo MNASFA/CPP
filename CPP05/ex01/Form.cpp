@@ -7,12 +7,14 @@ void Form::validateGrade(int grade){
         throw GradeTooLowException();
 }
 
-Form::Form() : _name("Default"), _isSigned(false), _gradeToSign(150), _gradeToExecute(150){
+Form::Form() : _name("Default"), _isSigned(false), _gradeToSign(150), _gradeToExecute(150)
+{
     std::cout << "Form Default constructor called" << std::endl;
 }
 
 Form::Form(const std::string name, const int gradeToSign, const int gradeToExecute) 
-: _name(name), _isSigned(false) ,_gradeToSign(gradeToSign), _gradeToExecute(gradeToExecute){
+: _name(name), _isSigned(false) ,_gradeToSign(gradeToSign), _gradeToExecute(gradeToExecute)
+{
     validateGrade(gradeToSign);
     validateGrade(gradeToExecute);
     std::cout << "Form " << _name << " constructor called" << std::endl;
@@ -25,7 +27,7 @@ Form::Form(const Form &other) : _name(other._name), _isSigned(other._isSigned)
 }
 
 Form &Form::operator=(const Form &other){
-    std::cout << "Form assignment operator called" << std::endl;
+    std::cout << "Form copy assignment operator called" << std::endl;
     if (this != &other) {
         _isSigned = other._isSigned;
     }
@@ -69,7 +71,8 @@ const char* Form::GradeTooLowException::what() const throw(){
 }
 
 std::ostream &operator<<(std::ostream &out, const Form &form){
-    out << "Name : " << form.getName() << "\n" << "Grade to sign : " << form.getGradeToSign()
-    << "\n" << "Grade to execute : " << form.getGradeToExecute();
+    out << "Name : " << form.getName() << "\n" 
+    << "Grade to sign : " << form.getGradeToSign() << "\n" 
+    << "Grade to execute : " << form.getGradeToExecute();
     return out;
 }

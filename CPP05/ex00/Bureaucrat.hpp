@@ -31,7 +31,7 @@ class Bureaucrat
         };
 
         class GradeTooLowException : public std::exception{
-            public :
+            public : 
                 const char *what() const throw();
         };
 };
