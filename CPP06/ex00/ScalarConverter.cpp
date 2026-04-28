@@ -9,7 +9,6 @@ ScalarConverter &ScalarConverter::operator=(const ScalarConverter &other){
 }
 ScalarConverter::~ScalarConverter(){};
 
-// Type detection 
 bool ScalarConverter::isChar(const std::string &literal){
     return (literal.length() == 1 && (literal[0] < '0' || literal[0] > '9'));
 }
@@ -88,7 +87,7 @@ bool ScalarConverter::isPseudoLiteral(const std::string &literal){
             literal == "inf" || literal == "inff");
 }
 
-// Display methods
+// displaying
 
 void ScalarConverter::displayChar(char c, bool impossible){
     std::cout << "char : ";
