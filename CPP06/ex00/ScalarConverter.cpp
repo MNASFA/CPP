@@ -189,12 +189,10 @@ void ScalarConverter::convertFromDouble(double d){
         displayInt(0, true);
     else
         displayInt(static_cast<int>(d), false);
-
-    float f_test3 = static_cast<float>(d);
-    if ((std::isinf(f_test3) && !std::isinf(d)) || (std::abs(d) > 0 && std::abs(d) > std::numeric_limits<float>::max())) {
+    if (std::abs(d) > std::numeric_limits<float>::max()) {
         displayFloat(0, true);
     } else {
-        displayFloat(f_test3, false);
+        displayFloat(static_cast<float>(d), false);
     }
 
     displayDouble(d, false);
