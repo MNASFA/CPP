@@ -81,10 +81,15 @@ bool ScalarConverter::isDouble(const std::string &literal){
 }
 
 bool ScalarConverter::isPseudoLiteral(const std::string &literal){
-    return (literal == "nan" || literal == "nanf" || 
-            literal == "+inf" || literal == "-inf" ||
-            literal == "+inff" || literal == "-inff" ||
-            literal == "inf" || literal == "inff");
+    if (literal == "nan" || literal == "nanf")
+        return true;
+    
+    if (literal == "inf" || literal == "inff" ||
+        literal == "+inf" || literal == "+inff" ||
+        literal == "-inf" || literal == "-inff")
+            return true;
+
+    return false;
 }
 
 // displaying
@@ -94,7 +99,7 @@ void ScalarConverter::displayChar(char c, bool impossible){
     if (impossible)
         std::cout << "impossible";
     else if (!std::isprint(static_cast<unsigned char>(c)))
-        std::cout << "Non diplayable";
+        std::cout << "Non displayable";
     else
         std::cout << "'" << c << "'";
     std::cout << std::endl;
@@ -185,7 +190,6 @@ void ScalarConverter::convertFromDouble(double d){
     else
         displayInt(static_cast<int>(d), false);
 
-    // Check if double fits in float
     float f_test3 = static_cast<float>(d);
     if ((std::isinf(f_test3) && !std::isinf(d)) || (std::abs(d) > 0 && std::abs(d) > std::numeric_limits<float>::max())) {
         displayFloat(0, true);
@@ -240,14 +244,12 @@ void ScalarConverter::convert(const std::string &literal){
         errno = 0;
         long tmp = std::strtol(literal.c_str(), NULL, 10);
         if (errno == ERANGE) {
-            // Number is too large for long, try double
             errno = 0;
             double d = std::strtod(literal.c_str(), NULL);
             if (errno == ERANGE) {
                 std::cout << "Error: number overflow" << std::endl;
                 return;
             }
-            // Display: char and int impossible, float and double possible
             displayChar(0, true);
             displayInt(0, true);
             float f_test1 = static_cast<float>(d);
@@ -260,7 +262,6 @@ void ScalarConverter::convert(const std::string &literal){
             return;
         }
         if (tmp < std::numeric_limits<int>::min() || tmp > std::numeric_limits<int>::max()) {
-            // Number fits in long but not in int, convert to double
             double d = static_cast<double>(tmp);
             displayChar(0, true);
             displayInt(0, true);
@@ -284,11 +285,8 @@ void ScalarConverter::convert(const std::string &literal){
             std::cout << "Error : number overflow" << std::endl;
             return ;
         }
-        // Check if it fits in float
         float f_test = static_cast<float>(d);
         if ((std::isinf(f_test) && !std::isinf(d)) || (std::abs(d) > 0 && std::abs(d) > std::numeric_limits<float>::max())) {
-            // Number doesn't fit in float, but might fit in double
-            // Use double for char and int checks
             if (std::isnan(d) || std::isinf(d) 
                 || d < std::numeric_limits<char>::min() 
                 || d > std::numeric_limits<char>::max())
@@ -303,8 +301,8 @@ void ScalarConverter::convert(const std::string &literal){
             else
                 displayInt(static_cast<int>(d), false);
 
-            displayFloat(0, true); // impossible for float
-            displayDouble(d, false); // but possible for double
+            displayFloat(0, true); 
+            displayDouble(d, false); 
         } else {
             convertFromFloat(static_cast<float>(d));
         }

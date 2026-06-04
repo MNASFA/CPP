@@ -18,21 +18,18 @@ class ScalarConverter
         ScalarConverter &operator=(const ScalarConverter &other);
         ~ScalarConverter();
 
-        // Helper methods to detect type 
         static bool isChar(const std::string &leteral);
         static bool isInt(const std::string &leteral);
         static bool isFloat(const std::string &leteral);
         static bool isDouble(const std::string &leteral);
         static bool isPseudoLiteral(const std::string &leteral);
 
-        // Helper methods for conversion
         static void convertFromChar(char c);
         static void convertFromInt(int i);
         static void convertFromFloat(float f);
         static void convertFromDouble(double d);
         static void handlePseudoLiteral(const std::string &literal);
 
-        // Display helper
         static void displayChar(char c, bool impossible);
         static void displayInt(int i, bool impossible);
         static void displayFloat(float f, bool impossible);
