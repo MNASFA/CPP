@@ -30,15 +30,18 @@ bool isInt(const std::string &literal){
     return true;
 }
 
-static bool isDecimal(const std::string &s) {
-    if (s.empty()) return false;
-    size_t i = (s[0] == '+' || s[0] == '-') ? 1 : 0;
-    bool hasDot = false, hasDigit = false;
-    while (i < s.length()) {
-        if (s[i] == '.') {
-            if (hasDot) return false;
+static bool isDecimal(const std::string &str) {
+    if (str.empty()) 
+        return false;
+    size_t i = (str[0] == '+' || str[0] == '-') ? 1 : 0;
+    bool hasDot = false;
+    bool hasDigit = false;
+    while (i < str.length()) {
+        if (str[i] == '.') {
+            if (hasDot) 
+                return false;
             hasDot = true;
-        } else if (std::isdigit(s[i]))
+        } else if (std::isdigit(str[i]))
             hasDigit = true;
         else
             return false;
@@ -161,19 +164,19 @@ void convertFromDouble(double d){
         displayChar(static_cast<char>(d), false);
 
     if (std::isnan(d) || std::isinf(d) 
-        || d < std::numeric_limits<int>::min() 
+        || d < std::numeric_limits<int>::min()
         || d > std::numeric_limits<int>::max())
         displayInt(0, true);
     else
         displayInt(static_cast<int>(d), false);
 
     float float_imp = static_cast<float>(d);
-    if (d > std::numeric_limits<float>::max())
+    if (d > std::numeric_limits<float>::max() || std::isinf(float_imp))
         displayFloat(0, true);
     else
         displayFloat(float_imp, false);
 
-    if (d > std::numeric_limits<double>::max())
+    if (d > std::numeric_limits<double>::max() || std::isinf(d))
         displayDouble(0, true);
     else
         displayDouble(d, false);
@@ -182,6 +185,7 @@ void convertFromDouble(double d){
 void handlePseudoLiteral(const std::string &literal){
     double d;
     float f;
+    
     if (literal == "nan" || literal == "nanf"){
         d = std::numeric_limits<double>::quiet_NaN();
         f = std::numeric_limits<float>::quiet_NaN();
@@ -222,17 +226,6 @@ void ScalarConverter::convert(const std::string &literal){
     if (isInt(literal)){
         errno = 0;
         long tmp = std::strtol(literal.c_str(), NULL, 10);
-        // if (errno == ERANGE)
-        // {
-        //     errno = 0;
-        //     double d = std::strtod(literal.c_str(), NULL);
-        //     if (errno == ERANGE) {
-        //         std::cout << "Error : number overflow" << std::endl;
-        //         return;
-        //     }
-        //     convertFromDouble(d);
-        //     return;
-        // }
         if (errno == ERANGE || tmp < std::numeric_limits<int>::min() 
             || tmp > std::numeric_limits<int>::max())
         {
@@ -246,7 +239,7 @@ void ScalarConverter::convert(const std::string &literal){
     if (isFloat(literal)){
         errno = 0;
         double d = std::strtod(literal.c_str(), NULL);
-        if (std::abs(d) > std::numeric_limits<float>::max())
+        if (d > std::numeric_limits<float>::max())
             convertFromDouble(d);
         else
             convertFromFloat(static_cast<float>(d));
