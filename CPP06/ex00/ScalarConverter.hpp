@@ -10,6 +10,16 @@
 #include <cerrno>
 #include <cctype>
 
+enum e_type {
+    CHAR,           
+    INT,            
+    FLOAT,          
+    DOUBLE,
+    FLOAT_PS,
+    DOUBLE_PS,
+    INVALID   
+};
+
 class ScalarConverter
 {
     private:

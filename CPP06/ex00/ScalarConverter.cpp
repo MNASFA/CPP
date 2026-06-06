@@ -1,256 +1,127 @@
 #include "ScalarConverter.hpp"
 #include <iomanip>
+#include <cstdlib>
+#include <climits>
+#include <cmath>
 
-ScalarConverter::ScalarConverter(){};
-ScalarConverter::ScalarConverter(const ScalarConverter &other){(void) other;}
-ScalarConverter &ScalarConverter::operator=(const ScalarConverter &other){
-    (void) other;
-    return *this;
-}
-ScalarConverter::~ScalarConverter(){};
+ScalarConverter::ScalarConverter() {}
+ScalarConverter::ScalarConverter(const ScalarConverter &other) { (void)other; }
+ScalarConverter &ScalarConverter::operator=(const ScalarConverter &other) { (void)other; return *this; }
+ScalarConverter::~ScalarConverter() {}
 
-bool isChar(const std::string &literal){
-    return (literal.length() == 1 && (literal[0] < '0' || literal[0] > '9'));
-}
+e_type detectType(const std::string& input) {
+    if (input == "nan" || input == "inf" || input == "+inf" || input == "-inf")
+        return DOUBLE_PS;
+    if (input == "nanf" || input == "inff" || input == "+inff" || input == "-inff")
+        return FLOAT_PS;
 
-bool isInt(const std::string &literal){
-    if (literal.empty())
-        return false;
+    if (input.length() == 1 && !std::isdigit(input[0]))
+        return CHAR;
 
-    size_t i = 0;
-    if (literal[i] == '+' || literal[i] == '-')
-        i++;
-    if (i >= literal.length())
-        return false;
-    while (i < literal.length()){
-        if (!std::isdigit(literal[i]))
-            return false;
-        i++;
+    char* endptr;
+    double val = std::strtod(input.c_str(), &endptr);
+    if (*endptr == '\0') {
+        if (input.find('.') == std::string::npos && val >= INT_MIN && val <= INT_MAX)
+            return INT;
+        return DOUBLE;
     }
-    return true;
+    if (*endptr == 'f' && *(endptr + 1) == '\0')
+        return FLOAT;
+    return INVALID;
 }
 
-static bool isDecimal(const std::string &str) {
-    if (str.empty()) 
-        return false;
-    size_t i = (str[0] == '+' || str[0] == '-') ? 1 : 0;
-    bool hasDot = false;
-    bool hasDigit = false;
-    while (i < str.length()) {
-        if (str[i] == '.') {
-            if (hasDot) 
-                return false;
-            hasDot = true;
-        } else if (std::isdigit(str[i]))
-            hasDigit = true;
-        else
-            return false;
-        i++;
-    }
-    return hasDot && hasDigit;
-}
+void print_all(int i, char c, float f, double d, bool possible, const std::string& input) {
+    bool isPseudo = (input == "nanf" || input == "inff" || input == "+inff" || input == "-inff" || 
+                     input == "nan" || input == "inf" || input == "+inf" || input == "-inf");
 
-bool isFloat(const std::string &literal) {
-    if (literal.empty() || literal[literal.length() - 1] != 'f') 
-        return false;
-    return isDecimal(literal.substr(0, literal.length() - 1));
-}
-
-bool isDouble(const std::string &literal) {
-    return isDecimal(literal);
-}
-
-bool isPseudoLiteral(const std::string &literal){
-    if (literal == "nan" || literal == "nanf")
-        return true;
-    
-    if (literal == "inf" || literal == "inff" ||
-        literal == "+inf" || literal == "+inff" ||
-        literal == "-inf" || literal == "-inff")
-            return true;
-
-    return false;
-}
-
-// displaying
-
-void displayChar(char c, bool impossible){
-    std::cout << "char : ";
-    if (impossible)
-        std::cout << "impossible";
+    std::cout << "char: ";
+    if (!possible || isPseudo || std::isnan(d) || std::isinf(d) || d < 0 || d > 127)
+        std::cout << "impossible" << std::endl;
     else if (!std::isprint(static_cast<unsigned char>(c)))
-        std::cout << "Non displayable";
+        std::cout << "Non displayable" << std::endl;
     else
-        std::cout << "'" << c << "'";
-    std::cout << std::endl;
+        std::cout << "'" << c << "'" << std::endl;
+
+    std::cout << "int: ";
+    if (!possible || isPseudo || std::isnan(d) || std::isinf(d) || d < INT_MIN || d > INT_MAX)
+        std::cout << "impossible" << std::endl;
+    else 
+        std::cout << i << std::endl;
+
+    std::cout << std::fixed << std::setprecision(1);
+    std::cout << "float: " << f << "f" << std::endl;
+    std::cout << "double: " << d << std::endl;
 }
 
-void displayInt(int i, bool impossible){
-    std::cout << "int : ";
-    if (impossible)
-        std::cout << "impossible";
-    else
-        std::cout << i;
-    std::cout << std::endl;
-}
-
-void displayFloat(float f, bool impossible){
-    std::cout << "float : ";
-    if (impossible)
-        std::cout << "impossible";
-    else{
-        std::cout << std::fixed << std::setprecision(1) << f;
-        std::cout << "f";
+void ScalarConverter::convert(const std::string& input) {
+    if (input.empty()) {
+        std::cout << "Error: empty literal" << std::endl;
+        return;
     }
-    std::cout << std::endl;
-}
 
-void displayDouble(double d, bool impossible){
-    std::cout << "double : ";
-    if (impossible)
-        std::cout << "impossible";
-    else{
-        std::cout << std::fixed << std::setprecision(1) << d;
-    }
-    std::cout << std::endl;
-}
-
-// Convertion methods
-
-void convertFromChar(char c){
-    displayChar(c, false);
-    displayInt(static_cast<int>(c), false);
-    displayFloat(static_cast<float>(c), false);
-    displayDouble(static_cast<double>(c), false);
-}
-
-void convertFromInt(int i){
-    if (i < std::numeric_limits<char>::min() || i > std::numeric_limits<char>::max())
-        displayChar(0, true);
-    else
-        displayChar(static_cast<char>(i), false);
-
-    displayInt(i, false);
-    displayFloat(static_cast<float>(i), false);
-    displayDouble(static_cast<double>(i), false);
-}
-
-void convertFromFloat(float f){
-    if (std::isnan(f) || std::isinf(f) 
-        || f < std::numeric_limits<char>::min() 
-        || f > std::numeric_limits<char>::max())
-        displayChar(0, true);
-    else
-        displayChar(static_cast<char>(f), false);
-
-    if (std::isnan(f) || std::isinf(f) 
-        || f < std::numeric_limits<int>::min() 
-        || f > std::numeric_limits<int>::max())
-        displayInt(0, true);
-    else
-        displayInt(static_cast<int>(f), false);
-
-    displayFloat(f, false);
-
-    displayDouble(static_cast<double>(f), false);
-}
-
-void convertFromDouble(double d){
-    if (std::isnan(d) || std::isinf(d) 
-        || d < std::numeric_limits<char>::min() 
-        || d > std::numeric_limits<char>::max())
-        displayChar(0, true);
-    else
-        displayChar(static_cast<char>(d), false);
-
-    if (std::isnan(d) || std::isinf(d) 
-        || d < std::numeric_limits<int>::min()
-        || d > std::numeric_limits<int>::max())
-        displayInt(0, true);
-    else
-        displayInt(static_cast<int>(d), false);
-
-    float float_imp = static_cast<float>(d);
-    if (d > std::numeric_limits<float>::max() || std::isinf(float_imp))
-        displayFloat(0, true);
-    else
-        displayFloat(float_imp, false);
-
-    if (d > std::numeric_limits<double>::max() || std::isinf(d))
-        displayDouble(0, true);
-    else
-        displayDouble(d, false);
-}
-
-void handlePseudoLiteral(const std::string &literal){
-    double d;
-    float f;
+    e_type type = detectType(input);
     
-    if (literal == "nan" || literal == "nanf"){
-        d = std::numeric_limits<double>::quiet_NaN();
-        f = std::numeric_limits<float>::quiet_NaN();
-    }
-    else if (literal == "inf" || literal == "inff" ||
-             literal == "+inf" || literal == "+inff" ){
-        d = std::numeric_limits<double>::infinity();
-        f = std::numeric_limits<float>::infinity();
-    }else {
-        d = -std::numeric_limits<double>::infinity();
-        f = -std::numeric_limits<float>::infinity();
-    }
+    int i = 0;
+    char c = 0;
+    float f = 0.0f;
+    double d = 0.0;
 
-    displayChar(0, true);
-    displayInt(0 , true);
-    displayFloat(f, false);
-    displayDouble(d, false);
-}
-
-void ScalarConverter::convert(const std::string &literal){
-    if (literal.empty()){
-        std::cout << "Error : empty literal" << std::endl;
-        return;
-    }
-
-    if (isPseudoLiteral(literal))
-    {
-        handlePseudoLiteral(literal);
-        return ;
-    }
-
-    if (isChar(literal))
-    {
-        convertFromChar(literal[0]);
-        return ;
-    }
-
-    if (isInt(literal)){
+   if (type == CHAR) {
+        c = input[0];
+        i = static_cast<int>(c);
+        f = static_cast<float>(c);
+        d = static_cast<double>(c);
+    } 
+    else if (type == INT) {
+        i = std::atoi(input.c_str());
+        c = static_cast<char>(i);
+        f = static_cast<float>(i);
+        d = static_cast<double>(i);
+    } 
+    else if (type == FLOAT) {
         errno = 0;
-        long tmp = std::strtol(literal.c_str(), NULL, 10);
-        if (errno == ERANGE || tmp < std::numeric_limits<int>::min() 
-            || tmp > std::numeric_limits<int>::max())
-        {
-            convertFromDouble(std::strtod(literal.c_str(), NULL));
-            return;
-        }
-        convertFromInt(static_cast<int>(tmp));
-        return;
-    }
-
-    if (isFloat(literal)){
-        errno = 0;
-        double d = std::strtod(literal.c_str(), NULL);
-        if (d > std::numeric_limits<float>::max())
-            convertFromDouble(d);
+        f = static_cast<float>(std::strtod(input.c_str(), NULL));
+        c = static_cast<char>(f);
+        i = static_cast<int>(f);
+        if (std::isinf(f))
+            d = std::strtod(input.c_str(), NULL);
         else
-            convertFromFloat(static_cast<float>(d));
-        return ;
+            d = static_cast<double>(f);
+    } 
+    else if (type == DOUBLE) {
+        d = std::strtod(input.c_str(), NULL);
+        c = static_cast<char>(d);
+        i = static_cast<int>(d);
+        f = static_cast<float>(d);
+    } 
+    else if (type == FLOAT_PS) {
+        if (input == "nanf") 
+            f = std::numeric_limits<float>::quiet_NaN();
+        else if (input == "-inff") 
+            f = -std::numeric_limits<float>::infinity();
+        else 
+            f = std::numeric_limits<float>::infinity();
+        
+        c = static_cast<char>(f);
+        i = static_cast<int>(f);
+        d = static_cast<double>(f);
+    } 
+    else if (type == DOUBLE_PS) {
+        if (input == "nan") 
+            d = std::numeric_limits<double>::quiet_NaN();
+        else if (input == "-inf") 
+            d = -std::numeric_limits<double>::infinity();
+        else 
+            d = std::numeric_limits<double>::infinity();
+
+        c = static_cast<char>(d);
+        i = static_cast<int>(d);
+        f = static_cast<float>(d);
+    } 
+    else {
+        std::cout << "Error: Invalid literal format" << std::endl;
+        return;
     }
 
-    if (isDouble(literal)){
-        errno = 0;
-        double d = std::strtod(literal.c_str(), NULL);
-        convertFromDouble(d);
-        return ;
-    }
-    std::cout << "Error : Invalid literal format" << std::endl;
+    print_all(i, c, f, d, true, input);
 }
