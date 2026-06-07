@@ -1,8 +1,8 @@
-NAME = Serializer
+NAME = Identify
 CPP = c++
 CPPFLAGS = -Wall -Wextra -Werror -std=c++98
 SRCS = main.cpp Base.cpp
-HEDEARS = Base.hpp A.hpp B.hpp B.hpp
+HEDEARS = Base.hpp A.hpp B.hpp C.hpp
 OBJS = $(SRCS:.cpp=.o)
 
 all: $(NAME)

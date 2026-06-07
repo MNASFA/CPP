@@ -4,7 +4,7 @@
 #include "C.hpp"
 
 int main(){
-    std::srand(time(NULL));
+    std::srand(std::time(0));
     
     std::cout << "=== Generate a random base object and identify it ====" << std::endl;
     Base *obj = generate();
