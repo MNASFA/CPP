@@ -36,5 +36,12 @@ int main(){
     ::iter(array, lenght, printInt);
     std::cout << std::endl;
 
+    const int constArr[] = {10, 20, 30, 40, 50};
+
+    std::cout << "=== Const array ===" << std::endl;
+    std::cout << "Array Content : ";
+    ::iter(constArr, 5, printInt); 
+    std::cout << std::endl;
+
     return 0;
 }

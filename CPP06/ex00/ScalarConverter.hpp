@@ -1,16 +1,15 @@
 #ifndef SCALARCONVERTER_HPP
 #define SCALARCONVERTER_HPP
 
-#include <string>
 #include <iostream>
 #include <iomanip>
 #include <limits>
-#include <cmath>
 #include <cstdlib>
-#include <cerrno>
 #include <cctype>
+#include <climits>
+#include <cmath>
 
-enum e_type {
+enum literalType {
     CHAR,           
     INT,            
     FLOAT,          
@@ -30,5 +29,5 @@ class ScalarConverter
 
     public:
         static void convert(const std::string &literal);
-    };
+};
 #endif

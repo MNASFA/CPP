@@ -31,32 +31,32 @@ class Array
         }
 
         Array(const Array &other) : elements(NULL), arr_size(other.arr_size){
-            if (arr_size > 0){
-                elements = new T[arr_size];
-                for (unsigned int i = 0; i < arr_size; i++){
-                    elements[i] = other.elements[i];
+            if (this->arr_size > 0){
+                elements = new T[this->arr_size];
+                for (unsigned int i = 0; i < this->arr_size; i++){
+                    this->elements[i] = other.elements[i];
                 }
             }
         }
 
         Array &operator=(const Array &other){
             if (this != &other){
-                delete[] elements;
+                delete[] this->elements;
 
                 arr_size = other.arr_size;
                 if (arr_size > 0){
-                    elements = new T[arr_size];
-                    for (unsigned int i = 0; i < arr_size; i++){
+                    elements = new T[this->arr_size];
+                    for (unsigned int i = 0; i < this->arr_size; i++){
                         elements[i] = other.elements[i];
                     }
                 } else
-                    elements = NULL;
+                    this->elements = NULL;
             }
             return *this;
         }
 
         ~Array() {
-            delete[] elements;
+            delete[] this->elements;
         }
 
         T& operator[](unsigned int index){
@@ -71,7 +71,7 @@ class Array
             return elements[index];
         }
 
-        unsigned int size(){
+        unsigned int size() const{
             return arr_size;
         }
 };

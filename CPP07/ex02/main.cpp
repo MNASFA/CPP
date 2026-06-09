@@ -15,7 +15,7 @@
 
 int main() 
 {
-    Array<int> arr(3);
+    Array<int> arr();
 
     arr[0] = 10;
     arr[1] = 20;
