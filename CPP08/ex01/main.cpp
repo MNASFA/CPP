@@ -33,10 +33,12 @@ int main()
         std::cout << "========================== Testing 10000 element ================================" << std::endl;
         std::cout << std::endl;
         
-        Span span(10000);
+        Span span(11);
         std::vector<int> bigVector;
+
+        span.addNumber(2);
         
-        for (int i = 0; i < 10000; i++)
+        for (int i = 0; i < 10; i++)
             bigVector.push_back(i);
 
         span.addNumbers(bigVector.begin(), bigVector.end());

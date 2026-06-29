@@ -12,15 +12,13 @@
 
 #include "Span.hpp"
 
-Span::Span() {}
+Span::Span() : N(0){}
 
-Span::Span(unsigned int N){
-    this->N = N;
-}
+Span::Span(unsigned int N) : N(N){}
 
 Span::Span(const Span &other){
     this->numbers = other.numbers;
-    this->N = other.N;   
+    this->N = other.N; 
 }
 
 Span &Span::operator=(const Span &other){
@@ -35,13 +33,13 @@ Span &Span::operator=(const Span &other){
 Span::~Span() {}
 
 void Span::addNumber(int number){
-    if (numbers.size() > this->N)
+    if (numbers.size() >= this->N)
         throw MaxValueException();
     numbers.push_back(number);
 }
 
 void Span::addNumbers(std::vector<int>::iterator begin, std::vector<int>::iterator end){
-    unsigned int range = (*end - *begin) + numbers.size();
+    unsigned int range = std::distance(begin, end) + numbers.size();
     if (range > this->N)
         throw MaxValueException();
     else
@@ -69,7 +67,7 @@ int Span::shortestSpan(){
         unsigned int mindiff = tmp[i + 1] - tmp[i];
         if (mindiff < min_distance)
             min_distance = mindiff;
-    }   
+    }
     return min_distance;
 }
 

@@ -22,7 +22,7 @@ int main()
     
     try
     {
-        std::vector<int>::iterator it = ::easyfind(numbers, 3);
+        std::vector<int>::iterator it = ::easyfind(numbers, 4);
         std::cout << "Number is : " << *it << std::endl;
     }
     catch(const std::exception& e)

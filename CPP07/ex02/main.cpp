@@ -15,11 +15,11 @@
 
 int main() 
 {
-    Array<int> arr();
+    Array<int> arr(3);
 
-    arr[0] = 10;
-    arr[1] = 20;
-    arr[2] = 30;
+    arr[0] = 1;
+    arr[1] = 2;
+    arr[2] = 3;
 
     std::cout << "Array size: " << arr.size() << std::endl;
     for (unsigned int i = 0; i < arr.size(); i++) {
@@ -28,7 +28,7 @@ int main()
 
     try {
         std::cout << "Accessing out of bounds..." << std::endl;
-        arr[3] = 0;
+        arr[3] = 4;
         std::cout << "Dooone!" << std::endl;
     } catch (const std::exception& e) {
         std::cout << "Exception : " << e.what() << std::endl;

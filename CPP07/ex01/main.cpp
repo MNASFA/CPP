@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.cpp                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: hmnasfa <hmnasfa@student.42.fr>            +#+  +:+       +#+        */
+/*   By: projects_1337 <projects_1337@student.42    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/21 09:37:48 by hmnasfa           #+#    #+#             */
-/*   Updated: 2025/12/21 09:37:49 by hmnasfa          ###   ########.fr       */
+/*   Updated: 2026/06/29 02:55:11 by projects_13      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,20 +27,20 @@ int main(){
 
     std::cout << "=== Before increment values ===" << std::endl;
     std::cout << "Array Content : ";
-    ::iter(array, lenght, printInt);
+    iter(array, lenght, printInt);
     std::cout << std::endl;
 
     std::cout << "=== After increment values ===" << std::endl;
-    ::iter(array, lenght, increment);
+    iter(array, lenght, increment);
     std::cout << "Array Content : ";
-    ::iter(array, lenght, printInt);
+    iter(array, lenght, printInt);
     std::cout << std::endl;
 
     const int constArr[] = {10, 20, 30, 40, 50};
 
     std::cout << "=== Const array ===" << std::endl;
     std::cout << "Array Content : ";
-    ::iter(constArr, 5, printInt); 
+    iter(constArr, 5, printInt); 
     std::cout << std::endl;
 
     return 0;

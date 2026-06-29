@@ -27,13 +27,15 @@ class MutantStack : public std::stack<T>
                 std::stack<T>::operator=(other);
             return *this;
         }
-        ~MutantStack();
+        ~MutantStack() {};
 
-        std::deque<T>::iterator begin(){
+        typedef typename std::deque<T>::iterator iterator;
+
+        typename std::deque<T>::iterator begin(){
             return (this->c.begin());
         }
         
-        std::deque<T>::iterator end(){
+        typename std::deque<T>::iterator end(){
             return (this->c.end());
         }
 };
