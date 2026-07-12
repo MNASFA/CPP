@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.cpp                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: hmnasfa <hmnasfa@student.42.fr>            +#+  +:+       +#+        */
+/*   By: projects_1337 <projects_1337@student.42    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/21 13:26:10 by hmnasfa           #+#    #+#             */
-/*   Updated: 2025/12/21 14:18:38 by hmnasfa          ###   ########.fr       */
+/*   Updated: 2026/07/12 03:23:52 by projects_13      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,7 +30,7 @@ int main()
         std::cout << sp.longestSpan() << std::endl;
 
         std::cout << std::endl;
-        std::cout << "========================== Testing 10000 element ================================" << std::endl;
+        std::cout << "========================== Testing multiple element ================================" << std::endl;
         std::cout << std::endl;
         
         Span span(11);

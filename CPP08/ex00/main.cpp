@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.cpp                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: hmnasfa <hmnasfa@student.42.fr>            +#+  +:+       +#+        */
+/*   By: projects_1337 <projects_1337@student.42    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/21 09:37:15 by hmnasfa           #+#    #+#             */
-/*   Updated: 2025/12/21 11:30:31 by hmnasfa          ###   ########.fr       */
+/*   Updated: 2026/07/12 02:20:17 by projects_13      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,7 +22,7 @@ int main()
     
     try
     {
-        std::vector<int>::iterator it = ::easyfind(numbers, 4);
+        std::vector<int>::iterator it = easyfind(numbers, 10);
         std::cout << "Number is : " << *it << std::endl;
     }
     catch(const std::exception& e)

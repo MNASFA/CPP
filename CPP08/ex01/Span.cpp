@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Span.cpp                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: hmnasfa <hmnasfa@student.42.fr>            +#+  +:+       +#+        */
+/*   By: projects_1337 <projects_1337@student.42    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/21 11:40:30 by hmnasfa           #+#    #+#             */
-/*   Updated: 2025/12/21 14:05:25 by hmnasfa          ###   ########.fr       */
+/*   Updated: 2026/07/12 03:08:51 by projects_13      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,19 +34,11 @@ Span::~Span() {}
 
 void Span::addNumber(int number){
     if (numbers.size() >= this->N)
-        throw MaxValueException();
+        throw SpanFullException();
     numbers.push_back(number);
 }
 
-void Span::addNumbers(std::vector<int>::iterator begin, std::vector<int>::iterator end){
-    unsigned int range = std::distance(begin, end) + numbers.size();
-    if (range > this->N)
-        throw MaxValueException();
-    else
-        numbers.insert(numbers.end(), begin, end);
-}
-
-int Span::longestSpan(){
+unsigned int Span::longestSpan(){
     if (numbers.size() < 2)
         throw LessThanTwoException();
         
@@ -56,7 +48,7 @@ int Span::longestSpan(){
     return (*max - *min);
 }
 
-int Span::shortestSpan(){
+unsigned int Span::shortestSpan(){
     if (numbers.size() < 2)
         throw LessThanTwoException();
     
@@ -64,14 +56,14 @@ int Span::shortestSpan(){
     std::vector<int> tmp = numbers;
     std::sort(tmp.begin(), tmp.end());
     for (size_t i = 0; i < tmp.size() - 1 ; i++) {
-        unsigned int mindiff = tmp[i + 1] - tmp[i];
+        unsigned int mindiff = static_cast<int>(tmp[i + 1]) - static_cast<int>(tmp[i]);
         if (mindiff < min_distance)
             min_distance = mindiff;
     }
     return min_distance;
 }
 
-const char *Span::MaxValueException::what() const throw(){
+const char *Span::SpanFullException::what() const throw(){
     return "Exception: The number is greater than max!";
 }
 

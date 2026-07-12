@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Span.hpp                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: hmnasfa <hmnasfa@student.42.fr>            +#+  +:+       +#+        */
+/*   By: projects_1337 <projects_1337@student.42    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/21 11:33:35 by hmnasfa           #+#    #+#             */
-/*   Updated: 2025/12/21 13:46:28 by hmnasfa          ###   ########.fr       */
+/*   Updated: 2026/07/12 03:00:40 by projects_13      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,19 +32,26 @@ class Span
         ~Span();
 
         void addNumber(int number);
-        void addNumbers(std::vector<int>::iterator begin, std::vector<int>::iterator end);
-        int shortestSpan();
-        int longestSpan();
+        
+        template <typename Iterator>
+        void addNumbers(Iterator begin, Iterator end) {
+            if (std::distance(begin, end) + numbers.size() > this->N)
+                throw SpanFullException();
+            numbers.insert(numbers.end(), begin, end);
+        }
+        
+        unsigned int shortestSpan();
+        unsigned int longestSpan();
         
 
-        class MaxValueException : public std::exception{
+        class SpanFullException : public std::exception{
             public:
-                virtual const char *what() const throw();
+                const char *what() const throw();
         };
 
         class LessThanTwoException : public std::exception{
             public:
-                virtual const char *what() const throw();
+                const char *what() const throw();
         };
 };
 

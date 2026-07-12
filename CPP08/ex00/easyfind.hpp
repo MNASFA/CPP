@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   easyfind.hpp                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: hmnasfa <hmnasfa@student.42.fr>            +#+  +:+       +#+        */
+/*   By: projects_1337 <projects_1337@student.42    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/21 09:37:09 by hmnasfa           #+#    #+#             */
-/*   Updated: 2025/12/21 11:03:12 by hmnasfa          ###   ########.fr       */
+/*   Updated: 2026/07/12 02:08:27 by projects_13      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,7 @@
 
 class EasyFindException : public std::exception{
     public:
-        virtual const char *what() const throw(){
+        const char *what() const throw(){
             return "Exception : Easy Find Exception!";
         }         
 };
