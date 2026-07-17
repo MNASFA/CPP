@@ -114,12 +114,23 @@ void BitcoinExchange::processFile(const std::string &filename){
     }
 
     std::string line;
+    std::string header;
 
-    std::getline(file, line);
+    if (!getline(file, header)){
+        std::cerr << "Error: empty file." << std::endl;
+        return;
+    }
+
+    if (header != "date | value"){
+        std::cerr << "Error: invalid header => " << header << std::endl;
+        return;
+    }
+
     while (std::getline(file, line))
     {
         size_t pipePos = line.find('|');
-        if (pipePos == std::string::npos){
+        if (pipePos == std::string::npos || pipePos == 0
+            || line[pipePos - 1] != ' ' || line[pipePos + 1] != ' '){
             std::cerr << "Error: bad input => " << line << std::endl;
             continue;
         }

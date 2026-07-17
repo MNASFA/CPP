@@ -27,22 +27,20 @@ PmergeMe &PmergeMe::operator=(const PmergeMe &other){
 
 PmergeMe::~PmergeMe(){}
 
-/*
-** Jacobsthal numbers: J(0)=0, J(1)=1, J(n) = J(n-1) + 2*J(n-2)
-** Returns the 0-indexed insertion order for elements 1..count-1
-** (element 0 is always inserted first, separately, before this is used).
-*/
+
 std::vector<size_t> PmergeMe::jacobsthalOrder(size_t count) const {
     std::vector<size_t> order;
     if (count <= 1)
         return order;
 
+    // Generate the jacobsthal sequence.
     std::vector<long> jac;
     jac.push_back(0);
     jac.push_back(1);
     while (jac.back() < static_cast<long>(count))
         jac.push_back(jac[jac.size() - 1] + 2 * jac[jac.size() - 2]);
 
+    
     std::vector<bool> used(count, false);
     used[0] = true;
 
@@ -51,10 +49,10 @@ std::vector<size_t> PmergeMe::jacobsthalOrder(size_t count) const {
         long lower = jac[k - 1] + 1;
         if (upper > static_cast<long>(count))
             upper = static_cast<long>(count);
-        for (long idx = upper; idx >= lower; idx--){
-            if (idx >= 1 && idx <= static_cast<long>(count) && !used[idx - 1]){
-                order.push_back(static_cast<size_t>(idx - 1));
-                used[idx - 1] = true;
+        for (long i = upper; i >= lower; i--){
+            if (i >= 1 && i <= static_cast<long>(count) && !used[i - 1]){
+                order.push_back(static_cast<size_t>(i - 1));
+                used[i - 1] = true;
             }
         }
     }
@@ -69,8 +67,6 @@ std::vector<size_t> PmergeMe::jacobsthalOrder(size_t count) const {
     return order;
 }
 
-/* ---------------------------- VECTOR VERSION ---------------------------- */
-
 std::vector<long> PmergeMe::mergeInsertSortVector(std::vector<long> arr){
     if (arr.size() <= 1)
         return arr;
@@ -80,7 +76,7 @@ std::vector<long> PmergeMe::mergeInsertSortVector(std::vector<long> arr){
     size_t n = hasStraggler ? arr.size() - 1 : arr.size();
 
     std::vector<long> largers;
-    std::vector<std::pair<long, long> > pairs; // (big, small), sorted by big for O(log n) lookup
+    std::vector<std::pair<long, long> > pairs; 
 
     for (size_t i = 0; i < n; i += 2){
         long a = arr[i];
@@ -94,10 +90,6 @@ std::vector<long> PmergeMe::mergeInsertSortVector(std::vector<long> arr){
 
     std::vector<long> chain = mergeInsertSortVector(largers);
 
-    // Re-align companions to the POST-recursion sorted order of the larger
-    // values (a_i), not their original pre-sort pairing index. Companions
-    // are looked up via binary search on `pairs` (O(log n) instead of the
-    // O(n) linear std::find used previously).
     std::vector<long> sortedChain = chain;
     std::vector<long> sortedSmallers(chain.size());
     for (size_t i = 0; i < chain.size(); i++){
@@ -113,9 +105,7 @@ std::vector<long> PmergeMe::mergeInsertSortVector(std::vector<long> arr){
     for (size_t i = 0; i < order.size(); i++){
         long largerVal = sortedChain[order[i]];
         long smallerVal = sortedSmallers[order[i]];
-        // chain is always kept sorted, so a binary search finds largerVal's
-        // current position in O(log n) instead of the O(n) linear std::find
-        // used previously.
+
         std::vector<long>::iterator largerPos = std::lower_bound(chain.begin(), chain.end(), largerVal);
         std::vector<long>::iterator insertPos = std::lower_bound(chain.begin(), largerPos, smallerVal);
         chain.insert(insertPos, smallerVal);
@@ -129,8 +119,6 @@ std::vector<long> PmergeMe::mergeInsertSortVector(std::vector<long> arr){
     return chain;
 }
 
-/* ---------------------------- DEQUE VERSION ---------------------------- */
-
 std::deque<long> PmergeMe::mergeInsertSortDeque(std::deque<long> arr){
     if (arr.size() <= 1)
         return arr;
@@ -140,7 +128,7 @@ std::deque<long> PmergeMe::mergeInsertSortDeque(std::deque<long> arr){
     size_t n = hasStraggler ? arr.size() - 1 : arr.size();
 
     std::deque<long> largers;
-    std::vector<std::pair<long, long> > pairs; // (big, small), sorted by big for O(log n) lookup
+    std::vector<std::pair<long, long> > pairs;
 
     for (size_t i = 0; i < n; i += 2){
         long a = arr[i];
@@ -154,10 +142,6 @@ std::deque<long> PmergeMe::mergeInsertSortDeque(std::deque<long> arr){
 
     std::deque<long> chain = mergeInsertSortDeque(largers);
 
-    // Re-align companions to the POST-recursion sorted order of the larger
-    // values (a_i), not their original pre-sort pairing index. Companions
-    // are looked up via binary search on `pairs` (O(log n) instead of the
-    // O(n) linear std::find used previously).
     std::deque<long> sortedChain = chain;
     std::deque<long> sortedSmallers(chain.size());
     for (size_t i = 0; i < chain.size(); i++){
@@ -173,9 +157,7 @@ std::deque<long> PmergeMe::mergeInsertSortDeque(std::deque<long> arr){
     for (size_t i = 0; i < order.size(); i++){
         long largerVal = sortedChain[order[i]];
         long smallerVal = sortedSmallers[order[i]];
-        // chain is always kept sorted, so a binary search finds largerVal's
-        // current position in O(log n) instead of the O(n) linear std::find
-        // used previously.
+    
         std::deque<long>::iterator largerPos = std::lower_bound(chain.begin(), chain.end(), largerVal);
         std::deque<long>::iterator insertPos = std::lower_bound(chain.begin(), largerPos, smallerVal);
         chain.insert(insertPos, smallerVal);
@@ -189,7 +171,6 @@ std::deque<long> PmergeMe::mergeInsertSortDeque(std::deque<long> arr){
     return chain;
 }
 
-/* ------------------------------- PUBLIC API ------------------------------ */
 
 void PmergeMe::parseInput(int argc, char **argv){
     if (argc < 2)
@@ -227,25 +208,25 @@ void PmergeMe::parseInput(int argc, char **argv){
 void PmergeMe::runVectorSort(){
     std::vector<long> work(_input);
 
-    struct timeval start, end;
-    gettimeofday(&start, NULL);
+    struct timespec start, end;
+    clock_gettime(CLOCK_MONOTONIC, &start);
 
     _vectorResult = mergeInsertSortVector(work);
 
-    gettimeofday(&end, NULL);
-    _vectorTime = (end.tv_sec - start.tv_sec) * 1000000.0 + (end.tv_usec - start.tv_usec);
+    clock_gettime(CLOCK_MONOTONIC, &end);
+    _vectorTime = (end.tv_sec - start.tv_sec) * 1000000.0 + (end.tv_nsec - start.tv_nsec) / 1000.0;
 }
 
 void PmergeMe::runDequeSort(){
     std::deque<long> work(_input.begin(), _input.end());
 
-    struct timeval start, end;
-    gettimeofday(&start, NULL);
+    struct timespec start, end;
+    clock_gettime(CLOCK_MONOTONIC, &start);
 
     _dequeResult = mergeInsertSortDeque(work);
 
-    gettimeofday(&end, NULL);
-    _dequeTime = (end.tv_sec - start.tv_sec) * 1000000.0 + (end.tv_usec - start.tv_usec);
+    clock_gettime(CLOCK_MONOTONIC, &end);
+    _dequeTime = (end.tv_sec - start.tv_sec) * 1000000.0 + (end.tv_nsec - start.tv_nsec) / 1000.0;
 }
 
 void PmergeMe::printResults() const {
@@ -259,9 +240,11 @@ void PmergeMe::printResults() const {
         std::cout << " " << _vectorResult[i];
     std::cout << std::endl;
 
+    std::cout << std::fixed << std::setprecision(5);
+
     std::cout << "Time to process a range of " << _input.size()
                << " elements with std::vector : " << _vectorTime << " us" << std::endl;
 
     std::cout << "Time to process a range of " << _input.size()
-               << " elements with std::deque : " << _dequeTime << " us" << std::endl;
+               << " elements with std::deque : " << _dequeTime <<  " us" << std::endl;
 }
