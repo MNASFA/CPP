@@ -15,8 +15,8 @@ class PmergeMe {
         double _vectorTime;
         double _dequeTime;
 
-        std::vector<long> mergeInsertSortVector(std::vector<long> arr);
-        std::deque<long>  mergeInsertSortDeque(std::deque<long> arr);
+        std::vector<long> sortVector(std::vector<long> arr);
+        std::deque<long>  sortDeque(std::deque<long> arr);
         std::vector<size_t> jacobsthalOrder(size_t count) const;
 
     public:

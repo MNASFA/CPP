@@ -44,12 +44,13 @@ std::vector<size_t> PmergeMe::jacobsthalOrder(size_t count) const {
     std::vector<bool> used(count, false);
     used[0] = true;
 
-    for (size_t k = 3; k < jac.size(); k++){
-        long upper = jac[k];
-        long lower = jac[k - 1] + 1;
-        if (upper > static_cast<long>(count))
-            upper = static_cast<long>(count);
-        for (long i = upper; i >= lower; i--){
+    for (size_t step = 3; step < jac.size(); step++){
+        long jumpTarget = jac[step];
+        long stopBackward = jac[step - 1] + 1;
+        if (jumpTarget > static_cast<long>(count)){
+            jumpTarget = static_cast<long>(count);
+        }
+        for (long i = jumpTarget; i >= stopBackward; i--){
             if (i >= 1 && i <= static_cast<long>(count) && !used[i - 1]){
                 order.push_back(static_cast<size_t>(i - 1));
                 used[i - 1] = true;
@@ -67,44 +68,48 @@ std::vector<size_t> PmergeMe::jacobsthalOrder(size_t count) const {
     return order;
 }
 
-std::vector<long> PmergeMe::mergeInsertSortVector(std::vector<long> arr){
-    if (arr.size() <= 1)
-        return arr;
+std::vector<long> PmergeMe::sortVector(std::vector<long> numbers){
+    if (numbers.size() <= 1)
+        return numbers;
 
-    bool hasStraggler = (arr.size() % 2 == 1);
-    long straggler = hasStraggler ? arr.back() : 0;
-    size_t n = hasStraggler ? arr.size() - 1 : arr.size();
+    bool hasStraggler = (numbers.size() % 2 == 1);
+    long straggler = hasStraggler ? numbers.back() : 0;
+    size_t pairCount = hasStraggler ? numbers.size() - 1 : numbers.size();
 
-    std::vector<long> largers;
-    std::vector<std::pair<long, long> > pairs; 
+    std::vector<long> bigNumbers;
+    std::vector<std::pair<long, long> > pairs;
 
-    for (size_t i = 0; i < n; i += 2){
-        long a = arr[i];
-        long b = arr[i + 1];
+    for (size_t i = 0; i < pairCount; i += 2){
+        long a = numbers[i];
+        long b = numbers[i + 1];
         long big = (a > b) ? a : b;
         long small = (a > b) ? b : a;
-        largers.push_back(big);
+        bigNumbers.push_back(big);
         pairs.push_back(std::make_pair(big, small));
     }
-    std::sort(pairs.begin(), pairs.end());
+    // std::sort(pairs.begin(), pairs.end());
 
-    std::vector<long> chain = mergeInsertSortVector(largers);
+    std::vector<long> chain = sortVector(bigNumbers);
 
-    std::vector<long> sortedChain = chain;
-    std::vector<long> sortedSmallers(chain.size());
+    std::vector<long> sortedBigNumbers = chain;
+    
+    std::vector<long> smallNumbers(chain.size());
     for (size_t i = 0; i < chain.size(); i++){
-        std::vector<std::pair<long, long> >::iterator it =
-            std::lower_bound(pairs.begin(), pairs.end(), std::make_pair(chain[i], LONG_MIN));
-        sortedSmallers[i] = it->second;
+        for (size_t j = 0; j < pairs.size(); j++){\
+            if (pairs[j].first == chain[i]){
+                smallNumbers[i] = pairs[j].second;
+                break;
+            }
+        }
     }
 
     if (!chain.empty())
-        chain.insert(chain.begin(), sortedSmallers[0]);
+        chain.insert(chain.begin(), smallNumbers[0]);
 
-    std::vector<size_t> order = jacobsthalOrder(sortedSmallers.size());
+    std::vector<size_t> order = jacobsthalOrder(smallNumbers.size());
     for (size_t i = 0; i < order.size(); i++){
-        long largerVal = sortedChain[order[i]];
-        long smallerVal = sortedSmallers[order[i]];
+        long largerVal = sortedBigNumbers[order[i]];
+        long smallerVal = smallNumbers[order[i]];
 
         std::vector<long>::iterator largerPos = std::lower_bound(chain.begin(), chain.end(), largerVal);
         std::vector<long>::iterator insertPos = std::lower_bound(chain.begin(), largerPos, smallerVal);
@@ -119,44 +124,47 @@ std::vector<long> PmergeMe::mergeInsertSortVector(std::vector<long> arr){
     return chain;
 }
 
-std::deque<long> PmergeMe::mergeInsertSortDeque(std::deque<long> arr){
-    if (arr.size() <= 1)
-        return arr;
+std::deque<long> PmergeMe::sortDeque(std::deque<long> numbers){
+    if (numbers.size() <= 1)
+        return numbers;
 
-    bool hasStraggler = (arr.size() % 2 == 1);
-    long straggler = hasStraggler ? arr.back() : 0;
-    size_t n = hasStraggler ? arr.size() - 1 : arr.size();
+    bool hasStraggler = (numbers.size() % 2 == 1);
+    long straggler = hasStraggler ? numbers.back() : 0;
+    size_t pairCount = hasStraggler ? numbers.size() - 1 : numbers.size();
 
-    std::deque<long> largers;
+    std::deque<long> bigNumbers;
     std::vector<std::pair<long, long> > pairs;
 
-    for (size_t i = 0; i < n; i += 2){
-        long a = arr[i];
-        long b = arr[i + 1];
+    for (size_t i = 0; i < pairCount; i += 2){
+        long a = numbers[i];
+        long b = numbers[i + 1];
         long big = (a > b) ? a : b;
         long small = (a > b) ? b : a;
-        largers.push_back(big);
+        bigNumbers.push_back(big);
         pairs.push_back(std::make_pair(big, small));
     }
-    std::sort(pairs.begin(), pairs.end());
+    // std::sort(pairs.begin(), pairs.end());
 
-    std::deque<long> chain = mergeInsertSortDeque(largers);
+    std::deque<long> chain = sortDeque(bigNumbers);
 
-    std::deque<long> sortedChain = chain;
-    std::deque<long> sortedSmallers(chain.size());
+    std::deque<long> sortedBigNumbers = chain;
+    std::deque<long> smallNumbers(chain.size());
     for (size_t i = 0; i < chain.size(); i++){
-        std::vector<std::pair<long, long> >::iterator it =
-            std::lower_bound(pairs.begin(), pairs.end(), std::make_pair(chain[i], LONG_MIN));
-        sortedSmallers[i] = it->second;
+        for (size_t j = 0; j < pairs.size(); j++){
+            if (pairs[j].first == chain[i]){
+                smallNumbers[i] = pairs[j].second;
+                break;
+            }
+        }
     }
 
     if (!chain.empty())
-        chain.insert(chain.begin(), sortedSmallers[0]);
+        chain.insert(chain.begin(), smallNumbers[0]);
 
-    std::vector<size_t> order = jacobsthalOrder(sortedSmallers.size());
+    std::vector<size_t> order = jacobsthalOrder(smallNumbers.size());
     for (size_t i = 0; i < order.size(); i++){
-        long largerVal = sortedChain[order[i]];
-        long smallerVal = sortedSmallers[order[i]];
+        long largerVal = sortedBigNumbers[order[i]];
+        long smallerVal = smallNumbers[order[i]];
     
         std::deque<long>::iterator largerPos = std::lower_bound(chain.begin(), chain.end(), largerVal);
         std::deque<long>::iterator insertPos = std::lower_bound(chain.begin(), largerPos, smallerVal);
@@ -173,17 +181,15 @@ std::deque<long> PmergeMe::mergeInsertSortDeque(std::deque<long> arr){
 
 
 void PmergeMe::parseInput(int argc, char **argv){
-    if (argc < 2)
-        throw std::runtime_error("no arguments");
 
     for (int i = 1; i < argc; i++){
         std::string token(argv[i]);
 
         if (token.empty())
-            throw std::runtime_error("empty token");
+            throw std::exception();
         for (size_t j = 0; j < token.length(); j++){
             if (!std::isdigit(static_cast<unsigned char>(token[j])))
-                throw std::runtime_error("non-digit character");
+                throw std::exception();
         }
 
         errno = 0;
@@ -211,7 +217,7 @@ void PmergeMe::runVectorSort(){
     struct timespec start, end;
     clock_gettime(CLOCK_MONOTONIC, &start);
 
-    _vectorResult = mergeInsertSortVector(work);
+    _vectorResult = sortVector(work);
 
     clock_gettime(CLOCK_MONOTONIC, &end);
     _vectorTime = (end.tv_sec - start.tv_sec) * 1000000.0 + (end.tv_nsec - start.tv_nsec) / 1000.0;
@@ -223,7 +229,7 @@ void PmergeMe::runDequeSort(){
     struct timespec start, end;
     clock_gettime(CLOCK_MONOTONIC, &start);
 
-    _dequeResult = mergeInsertSortDeque(work);
+    _dequeResult = sortDeque(work);
 
     clock_gettime(CLOCK_MONOTONIC, &end);
     _dequeTime = (end.tv_sec - start.tv_sec) * 1000000.0 + (end.tv_nsec - start.tv_nsec) / 1000.0;
@@ -246,5 +252,5 @@ void PmergeMe::printResults() const {
                << " elements with std::vector : " << _vectorTime << " us" << std::endl;
 
     std::cout << "Time to process a range of " << _input.size()
-               << " elements with std::deque : " << _dequeTime <<  " us" << std::endl;
+                << " elements with std::deque : " << _dequeTime <<  " us" << std::endl;
 }
