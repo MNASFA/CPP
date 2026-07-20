@@ -25,7 +25,7 @@ bool RPN::isNumber(const std::string &token) const{
     if (token.empty())
         return false;
     for (size_t i = 0; i < token.length(); i++){
-        if (!std::isdigit(static_cast<unsigned char>(token[i])))
+        if (!std::isdigit(token[i]))
             return false;
     }
     return true;
@@ -42,10 +42,10 @@ double RPN::applyOperator(double a, double b, char op) const{
             return a * b;
         case '/':
             if (b == 0) 
-                throw std::runtime_error("division by zero");
+                throw std::runtime_error("Error");
             return a / b;
         default:
-            throw std::runtime_error("unknown operator");
+            throw std::runtime_error("Error");
     }
 }
 
@@ -57,26 +57,26 @@ double RPN::evaluate(const std::string &expression){
     {   
         if (isNumber(token)){
             if (token.length() > 1)
-                throw std::runtime_error("invalid number");
-            _stack.push(std::atof(token.c_str()));
+                throw std::runtime_error("Error");
+            stack.push(std::atoi(token.c_str()));
         }
         else if (isOperator(token)){
-            if (_stack.size() < 2)
-                throw std::runtime_error("insufficient operands");
-            double b = _stack.top();
-            _stack.pop();
-            double a = _stack.top();
-            _stack.pop();
-            _stack.push(applyOperator(a, b, token[0]));
+            if (stack.size() < 2)
+                throw std::runtime_error("Error");
+            double b = stack.top();
+            stack.pop();
+            double a = stack.top();
+            stack.pop();
+            stack.push(applyOperator(a, b, token[0]));
         }
         else
-            throw std::runtime_error("invalid token");
+            throw std::runtime_error("Error");
     }
 
-    if (_stack.size() != 1)
-        throw std::runtime_error("invalid expression");
+    if (stack.size() != 1)
+        throw std::runtime_error("Error");
 
-    double result = _stack.top();
-    _stack.pop();
+    double result = stack.top();
+    stack.pop();
     return result;
 }

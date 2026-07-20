@@ -96,13 +96,24 @@ float BitcoinExchange::getPrice(const std::string &date){
     return it->second;
 }
 
-std::string BitcoinExchange::trim(std::string &str){
-    size_t first = str.find_first_not_of(" \t\n\r");
-    if (first == std::string::npos)
+std::string BitcoinExchange::trim(std::string &str) {
+    if (str.empty())
         return "";
-    
-    size_t last = str.find_last_not_of(" \t\n\r");
-    return str.substr(first, (last - first + 1));
+
+    size_t start = 0;
+    while (start < str.length() && std::isspace(str[start])) {
+        start++;
+    }
+
+    if (start == str.length())
+        return "";
+
+    size_t end = str.length() - 1;
+    while (end > start && std::isspace(str[end])) {
+        end--;
+    }
+
+    return str.substr(start, end - start + 1);
 }
 
 void BitcoinExchange::processFile(const std::string &filename){
@@ -122,15 +133,14 @@ void BitcoinExchange::processFile(const std::string &filename){
     }
 
     if (header != "date | value"){
-        std::cerr << "Error: invalid header => " << header << std::endl;
+        std::cerr << "Error: invalid header => \"" << header << "\"" << std::endl;
         return;
     }
 
     while (std::getline(file, line))
     {
         size_t pipePos = line.find('|');
-        if (pipePos == std::string::npos || pipePos == 0
-            || line[pipePos - 1] != ' ' || line[pipePos + 1] != ' '){
+        if (pipePos == std::string::npos || line[pipePos - 1] != ' ' || line[pipePos + 1] != ' '){
             std::cerr << "Error: bad input => " << line << std::endl;
             continue;
         }

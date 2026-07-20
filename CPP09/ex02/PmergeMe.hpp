@@ -9,11 +9,11 @@
 
 class PmergeMe {
     private:
-        std::vector<long> _input;
-        std::vector<long> _vectorResult;
-        std::deque<long>  _dequeResult;
-        double _vectorTime;
-        double _dequeTime;
+        std::vector<long> input;
+        std::vector<long> vectorResult;
+        std::deque<long>  dequeResult;
+        double vectorTime;
+        double dequeTime;
 
         std::vector<long> sortVector(std::vector<long> arr);
         std::deque<long>  sortDeque(std::deque<long> arr);

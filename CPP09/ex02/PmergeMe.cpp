@@ -5,10 +5,9 @@
 #include <climits>
 #include <cctype>
 #include <cerrno>
-#include <sys/time.h>
 #include <stdexcept>
 
-PmergeMe::PmergeMe() : _vectorTime(0), _dequeTime(0) {}
+PmergeMe::PmergeMe() : vectorTime(0), dequeTime(0) {}
 
 PmergeMe::PmergeMe(const PmergeMe &other){
     *this = other;
@@ -16,11 +15,11 @@ PmergeMe::PmergeMe(const PmergeMe &other){
 
 PmergeMe &PmergeMe::operator=(const PmergeMe &other){
     if (this != &other){
-        _input = other._input;
-        _vectorResult = other._vectorResult;
-        _dequeResult = other._dequeResult;
-        _vectorTime = other._vectorTime;
-        _dequeTime = other._dequeTime;
+        input = other.input;
+        vectorResult = other.vectorResult;
+        dequeResult = other.dequeResult;
+        vectorTime = other.vectorTime;
+        dequeTime = other.dequeTime;
     }
     return *this;
 }
@@ -33,13 +32,11 @@ std::vector<size_t> PmergeMe::jacobsthalOrder(size_t count) const {
     if (count <= 1)
         return order;
 
-    // Generate the jacobsthal sequence.
     std::vector<long> jac;
     jac.push_back(0);
     jac.push_back(1);
     while (jac.back() < static_cast<long>(count))
         jac.push_back(jac[jac.size() - 1] + 2 * jac[jac.size() - 2]);
-
     
     std::vector<bool> used(count, false);
     used[0] = true;
@@ -87,7 +84,6 @@ std::vector<long> PmergeMe::sortVector(std::vector<long> numbers){
         bigNumbers.push_back(big);
         pairs.push_back(std::make_pair(big, small));
     }
-    // std::sort(pairs.begin(), pairs.end());
 
     std::vector<long> chain = sortVector(bigNumbers);
 
@@ -143,7 +139,6 @@ std::deque<long> PmergeMe::sortDeque(std::deque<long> numbers){
         bigNumbers.push_back(big);
         pairs.push_back(std::make_pair(big, small));
     }
-    // std::sort(pairs.begin(), pairs.end());
 
     std::deque<long> chain = sortDeque(bigNumbers);
 
@@ -179,78 +174,79 @@ std::deque<long> PmergeMe::sortDeque(std::deque<long> numbers){
     return chain;
 }
 
+void PmergeMe::parseInput(int ac, char **av){
+    if (ac < 2){
+        throw std::runtime_error("Error");
+    }
 
-void PmergeMe::parseInput(int argc, char **argv){
-
-    for (int i = 1; i < argc; i++){
-        std::string token(argv[i]);
+    for (int i = 1; i < ac; i++){
+        std::string token(av[i]);
 
         if (token.empty())
-            throw std::exception();
+            throw std::runtime_error("Error");
         for (size_t j = 0; j < token.length(); j++){
-            if (!std::isdigit(static_cast<unsigned char>(token[j])))
-                throw std::exception();
+            if (!std::isdigit(token[j]))
+                throw std::runtime_error("Error");
         }
 
         errno = 0;
-        char *end;
-        long value = std::strtol(token.c_str(), &end, 10);
-        if (*end != '\0' || errno == ERANGE)
-            throw std::runtime_error("out of range");
+        long value = std::strtol(token.c_str(), NULL, 10);
+        if (errno == ERANGE)
+            throw std::runtime_error("Error");
         if (value <= 0 || value > INT_MAX)
-            throw std::runtime_error("value out of bounds");
+            throw std::runtime_error("Error");
 
-        _input.push_back(value);
+        input.push_back(value);
     }
 
-    std::vector<long> check(_input);
+    std::vector<long> check(input);
     std::sort(check.begin(), check.end());
     for (size_t i = 1; i < check.size(); i++){
         if (check[i] == check[i - 1])
-            throw std::runtime_error("duplicate value");
+            throw std::runtime_error("Error");
     }
 }
 
 void PmergeMe::runVectorSort(){
-    std::vector<long> work(_input);
+    std::vector<long> copy(input);
 
     struct timespec start, end;
     clock_gettime(CLOCK_MONOTONIC, &start);
 
-    _vectorResult = sortVector(work);
+    vectorResult = sortVector(copy);
 
     clock_gettime(CLOCK_MONOTONIC, &end);
-    _vectorTime = (end.tv_sec - start.tv_sec) * 1000000.0 + (end.tv_nsec - start.tv_nsec) / 1000.0;
+    vectorTime = (end.tv_sec - start.tv_sec) * 1000000.0 + (end.tv_nsec - start.tv_nsec) / 1000.0;
 }
 
 void PmergeMe::runDequeSort(){
-    std::deque<long> work(_input.begin(), _input.end());
+    std::deque<long> copy(input.begin(), input.end());
 
     struct timespec start, end;
     clock_gettime(CLOCK_MONOTONIC, &start);
 
-    _dequeResult = sortDeque(work);
+    dequeResult = sortDeque(copy);
 
     clock_gettime(CLOCK_MONOTONIC, &end);
-    _dequeTime = (end.tv_sec - start.tv_sec) * 1000000.0 + (end.tv_nsec - start.tv_nsec) / 1000.0;
+    dequeTime = (end.tv_sec - start.tv_sec) * 1000000.0 + (end.tv_nsec - start.tv_nsec) / 1000.0;
 }
 
 void PmergeMe::printResults() const {
     std::cout << "Before:";
-    for (size_t i = 0; i < _input.size(); i++)
-        std::cout << " " << _input[i];
+    for (size_t i = 0; i < input.size(); i++)
+        std::cout << " " << input[i];
     std::cout << std::endl;
 
     std::cout << "After:";
-    for (size_t i = 0; i < _vectorResult.size(); i++)
-        std::cout << " " << _vectorResult[i];
+    for (size_t i = 0; i < vectorResult.size(); i++)
+        std::cout << " " << vectorResult[i];
     std::cout << std::endl;
 
     std::cout << std::fixed << std::setprecision(5);
 
-    std::cout << "Time to process a range of " << _input.size()
-               << " elements with std::vector : " << _vectorTime << " us" << std::endl;
+    std::cout << "Time to process a range of " << input.size()
+               << " elements with std::vector : " << vectorTime << " us" << std::endl;
 
-    std::cout << "Time to process a range of " << _input.size()
-                << " elements with std::deque : " << _dequeTime <<  " us" << std::endl;
+    std::cout << "Time to process a range of " << input.size()
+                << " elements with std::deque : " << dequeTime <<  " us" << std::endl;
 }
