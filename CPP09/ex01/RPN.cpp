@@ -42,10 +42,10 @@ double RPN::applyOperator(double a, double b, char op) const{
             return a * b;
         case '/':
             if (b == 0) 
-                throw std::runtime_error("Error");
+                throw std::runtime_error("Error: division by zero.");
             return a / b;
         default:
-            throw std::runtime_error("Error");
+            throw std::runtime_error("Error: unknown operator.");
     }
 }
 
@@ -57,12 +57,12 @@ double RPN::evaluate(const std::string &expression){
     {   
         if (isNumber(token)){
             if (token.length() > 1)
-                throw std::runtime_error("Error");
+                throw std::runtime_error("Error: invalid number.");
             stack.push(std::atoi(token.c_str()));
         }
         else if (isOperator(token)){
             if (stack.size() < 2)
-                throw std::runtime_error("Error");
+                throw std::runtime_error("Error: less than two operands.");
             double b = stack.top();
             stack.pop();
             double a = stack.top();
@@ -70,11 +70,11 @@ double RPN::evaluate(const std::string &expression){
             stack.push(applyOperator(a, b, token[0]));
         }
         else
-            throw std::runtime_error("Error");
+            throw std::runtime_error("Error: invalid token.");
     }
 
     if (stack.size() != 1)
-        throw std::runtime_error("Error");
+        throw std::runtime_error("Error: invalid expression format.");
 
     double result = stack.top();
     stack.pop();

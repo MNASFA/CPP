@@ -53,8 +53,7 @@ void BitcoinExchange::loadData(const std::string &filename){
     std::ifstream file(filename.c_str());
 
     if (!file.is_open()){
-        std::cerr << "Error : could not open file." << std::endl;
-        return ;
+       throw std::runtime_error("Error: could not open file.");
     }
 
     std::string line;
@@ -120,16 +119,14 @@ void BitcoinExchange::processFile(const std::string &filename){
     std::ifstream file(filename.c_str());
 
     if(!file.is_open()){
-        std::cerr << "Error: could not open file." << std::endl;
-        return;
+       throw std::runtime_error("Error: could not open file.");
     }
 
     std::string line;
     std::string header;
 
     if (!getline(file, header)){
-        std::cerr << "Error: empty file." << std::endl;
-        return;
+        throw std::runtime_error("Error: empty file.");
     }
 
     if (header != "date | value"){
@@ -140,7 +137,8 @@ void BitcoinExchange::processFile(const std::string &filename){
     while (std::getline(file, line))
     {
         size_t pipePos = line.find('|');
-        if (pipePos == std::string::npos || line[pipePos - 1] != ' ' || line[pipePos + 1] != ' '){
+        if (pipePos == std::string::npos || line[pipePos - 1] != ' ' || line[pipePos + 1] != ' '
+            || line[pipePos - 2] == ' ' || line[pipePos + 2] == ' '){
             std::cerr << "Error: bad input => " << line << std::endl;
             continue;
         }

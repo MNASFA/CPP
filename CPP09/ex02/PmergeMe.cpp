@@ -87,11 +87,9 @@ std::vector<long> PmergeMe::sortVector(std::vector<long> numbers){
 
     std::vector<long> chain = sortVector(bigNumbers);
 
-    std::vector<long> sortedBigNumbers = chain;
-    
     std::vector<long> smallNumbers(chain.size());
     for (size_t i = 0; i < chain.size(); i++){
-        for (size_t j = 0; j < pairs.size(); j++){\
+        for (size_t j = 0; j < pairs.size(); j++){
             if (pairs[j].first == chain[i]){
                 smallNumbers[i] = pairs[j].second;
                 break;
@@ -99,17 +97,33 @@ std::vector<long> PmergeMe::sortVector(std::vector<long> numbers){
         }
     }
 
-    if (!chain.empty())
+    std::vector<size_t> tracker(smallNumbers.size());
+    for (size_t i = 0; i < tracker.size(); i++) {
+        tracker[i] = i; 
+    }
+
+    if (!chain.empty()){
         chain.insert(chain.begin(), smallNumbers[0]);
+        for (size_t i = 0; i < tracker.size(); i++) {
+            tracker[i]++;
+        }
+    }
 
     std::vector<size_t> order = jacobsthalOrder(smallNumbers.size());
     for (size_t i = 0; i < order.size(); i++){
-        long largerVal = sortedBigNumbers[order[i]];
-        long smallerVal = smallNumbers[order[i]];
-
-        std::vector<long>::iterator largerPos = std::lower_bound(chain.begin(), chain.end(), largerVal);
-        std::vector<long>::iterator insertPos = std::lower_bound(chain.begin(), largerPos, smallerVal);
+        size_t idx = order[i];
+        long smallerVal = smallNumbers[idx];
+        size_t stopPos = tracker[idx]; 
+        
+        std::vector<long>::iterator insertPos = std::lower_bound(chain.begin(), chain.begin() + stopPos, smallerVal);
+        
+        size_t dist = std::distance(chain.begin(), insertPos);
         chain.insert(insertPos, smallerVal);
+        for (size_t j = 0; j < tracker.size(); j++) {
+            if (tracker[j] >= dist) {
+                tracker[j]++;
+            }
+        }
     }
 
     if (hasStraggler){
@@ -142,7 +156,6 @@ std::deque<long> PmergeMe::sortDeque(std::deque<long> numbers){
 
     std::deque<long> chain = sortDeque(bigNumbers);
 
-    std::deque<long> sortedBigNumbers = chain;
     std::deque<long> smallNumbers(chain.size());
     for (size_t i = 0; i < chain.size(); i++){
         for (size_t j = 0; j < pairs.size(); j++){
@@ -153,17 +166,33 @@ std::deque<long> PmergeMe::sortDeque(std::deque<long> numbers){
         }
     }
 
-    if (!chain.empty())
+    std::vector<size_t> tracker(smallNumbers.size());
+    for (size_t i = 0; i < tracker.size(); i++) {
+        tracker[i] = i;
+    }
+
+    if (!chain.empty()){
         chain.insert(chain.begin(), smallNumbers[0]);
+        for (size_t i = 0; i < tracker.size(); i++) {
+            tracker[i]++;
+        }
+    }
 
     std::vector<size_t> order = jacobsthalOrder(smallNumbers.size());
     for (size_t i = 0; i < order.size(); i++){
-        long largerVal = sortedBigNumbers[order[i]];
-        long smallerVal = smallNumbers[order[i]];
-    
-        std::deque<long>::iterator largerPos = std::lower_bound(chain.begin(), chain.end(), largerVal);
-        std::deque<long>::iterator insertPos = std::lower_bound(chain.begin(), largerPos, smallerVal);
+        size_t idx = order[i];
+        long smallerVal = smallNumbers[idx];
+        size_t stopPos = tracker[idx]; 
+        
+        std::deque<long>::iterator insertPos = std::lower_bound(chain.begin(), chain.begin() + stopPos, smallerVal);
+
+        size_t dist = std::distance(chain.begin(), insertPos);
         chain.insert(insertPos, smallerVal);
+        for (size_t k = 0; k < tracker.size(); k++) {
+            if (tracker[k] >= dist) {
+                tracker[k]++;
+            }
+        }
     }
 
     if (hasStraggler){
@@ -176,25 +205,25 @@ std::deque<long> PmergeMe::sortDeque(std::deque<long> numbers){
 
 void PmergeMe::parseInput(int ac, char **av){
     if (ac < 2){
-        throw std::runtime_error("Error");
+        throw std::runtime_error("Error: not enough arguments.");
     }
 
     for (int i = 1; i < ac; i++){
         std::string token(av[i]);
 
         if (token.empty())
-            throw std::runtime_error("Error");
+            throw std::runtime_error("Error: empty argument.");
         for (size_t j = 0; j < token.length(); j++){
             if (!std::isdigit(token[j]))
-                throw std::runtime_error("Error");
+                throw std::runtime_error("Error: invalid character.");
         }
 
         errno = 0;
         long value = std::strtol(token.c_str(), NULL, 10);
         if (errno == ERANGE)
-            throw std::runtime_error("Error");
+            throw std::runtime_error("Error: number is out of range.");
         if (value <= 0 || value > INT_MAX)
-            throw std::runtime_error("Error");
+            throw std::runtime_error("Error: invalid number.");
 
         input.push_back(value);
     }
@@ -203,7 +232,7 @@ void PmergeMe::parseInput(int ac, char **av){
     std::sort(check.begin(), check.end());
     for (size_t i = 1; i < check.size(); i++){
         if (check[i] == check[i - 1])
-            throw std::runtime_error("Error");
+            throw std::runtime_error("Error: duplicate numbers.");
     }
 }
 

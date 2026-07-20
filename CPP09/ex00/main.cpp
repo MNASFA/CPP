@@ -8,9 +8,16 @@ int main(int ac, char **av)
         return 1;
     }
 
-    BitcoinExchange btc;
-    btc.loadData("data.csv");
-    btc.processFile(av[1]);
+    try
+    {
+        BitcoinExchange btc;
+        btc.loadData("data.csv");
+        btc.processFile(av[1]);
+    }
+    catch(const std::exception& e)
+    {
+        std::cerr << e.what() << std::endl;
+    }
     
     return 0;
 }
